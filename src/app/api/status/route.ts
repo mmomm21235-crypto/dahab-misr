@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db/prisma";
-import { getSecurityStats } from "@/lib/security/ip-block";
+import { withSecurity } from "@/lib/api-security";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export const GET = withSecurity(async () => {
   const statuses: Record<string, unknown> = {
     database: { status: "unknown" },
   };
@@ -19,15 +19,9 @@ export async function GET() {
     statuses.database = { status: "error" };
   }
 
-  const security = getSecurityStats();
-
   return NextResponse.json({
     success: true,
     status: "ok",
     database: statuses.database,
-    security: {
-      blockedIPs: security.blockedIPs,
-      suspiciousIPs: security.suspiciousIPs,
-    },
   });
-}
+}, { rateLimit: "api" });

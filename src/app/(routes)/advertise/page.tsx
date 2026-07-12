@@ -4,6 +4,7 @@ import { AdvertiseContent } from "@/components/advertise/AdvertiseContent";
 export const metadata: Metadata = {
   title: "إعلن هنا",
   description: "أعلن عن محلك في تطبيق ذهب مصر ووصل لأكبر شريحة من المستهدفين",
+  alternates: { canonical: "/advertise" },
 };
 
 export default function AdvertisePage() {

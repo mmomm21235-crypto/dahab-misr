@@ -1,10 +1,18 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
+import { Cairo } from "next/font/google";
 import "./globals.css";
 import { ErrorBoundary } from "@/components/shared/ErrorBoundary";
 import { AppShell } from "@/components/layout/AppShell";
 import Providers from "@/components/shared/Providers";
 import arMessages from "@/messages/ar.json";
+
+const cairo = Cairo({
+  subsets: ["arabic", "latin"],
+  weight: ["400", "600", "700", "900"],
+  display: "swap",
+  variable: "--font-cairo",
+});
 
 export const metadata: Metadata = {
   title: {
@@ -108,17 +116,23 @@ export default function RootLayout({
       url: "https://dahab-misr.vercel.app",
       description: "تطبيق لمتابعة أسعار الذهب في مصر لحظة بلحظة",
     },
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      name: "ذهب مصر",
+      url: "https://dahab-misr.vercel.app",
+      potentialAction: {
+        "@type": "SearchAction",
+        target: "https://dahab-misr.vercel.app/news?q={search_term_string}",
+        "query-input": "required name=search_term_string",
+      },
+    },
   ];
 
   return (
-    <html lang="ar" dir="rtl" suppressHydrationWarning>
+    <html lang="ar" dir="rtl" suppressHydrationWarning className={cairo.variable}>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" />
-        <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet" />
-        <link rel="preload" as="image" href="/icons/icon-192x192.png" />
-        <link rel="preload" as="fetch" href="/api/gold-prices" crossOrigin="anonymous" />
+        <link rel="preload" as="image" href="/icons/icon-192x192.png" type="image/png" />
         <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
         <meta name="google-site-verification" content="googlee9ab5896b100ea68" />
         <meta name="mobile-web-app-capable" content="yes" />
@@ -131,7 +145,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="font-arabic antialiased">
+      <body className={`${cairo.className} antialiased`}>
         <Providers locale="ar" messages={arMessages}>
           <ErrorBoundary>
             <AppShell>{children}</AppShell>
@@ -139,9 +153,9 @@ export default function RootLayout({
         </Providers>
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-MD53RY84YW"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
-        <Script id="ga-config" strategy="afterInteractive">
+        <Script id="ga-config" strategy="lazyOnload">
           {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MD53RY84YW');`}
         </Script>
         <Script id="install-prompt" strategy="afterInteractive">
@@ -149,9 +163,6 @@ export default function RootLayout({
         </Script>
         <Script id="sw-register" strategy="afterInteractive">
           {`if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});}`}
-        </Script>
-        <Script id="security-init" strategy="afterInteractive">
-          {`if('${process.env.NODE_ENV}'==='production'){document.addEventListener('contextmenu',function(e){e.preventDefault()});document.addEventListener('keydown',function(e){if(e.ctrlKey&&e.key==='s'||e.ctrlKey&&e.key==='u'||e.ctrlKey&&e.shiftKey&&e.key==='I'||e.key==='F12'){e.preventDefault();return false;}});if(window.top!==window.self){window.top.location=window.self.location;}}`}
         </Script>
       </body>
     </html>

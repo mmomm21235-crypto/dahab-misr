@@ -1,5 +1,14 @@
 export function sanitizeString(input: string, maxLength: number = 500): string {
-  return input.trim().slice(0, maxLength).replace(/[<>]/g, "");
+  return input.trim().slice(0, maxLength).replace(/[<>"'&]/g, (match) => {
+    const entities: Record<string, string> = {
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#x27;",
+      "&": "&amp;",
+    };
+    return entities[match] || match;
+  });
 }
 
 export function validateEmail(email: string): boolean {
@@ -26,4 +35,13 @@ export function validateKarat(karat: unknown): karat is number {
 
 export function validateId(id: string): boolean {
   return typeof id === "string" && id.length > 0 && id.length <= 50 && /^[a-zA-Z0-9_-]+$/.test(id);
+}
+
+export function sanitizeUrl(url: string): boolean {
+  try {
+    const parsed = new URL(url);
+    return ["http:", "https:"].includes(parsed.protocol);
+  } catch {
+    return false;
+  }
 }

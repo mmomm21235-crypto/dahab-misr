@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db/prisma";
 import { generateHistoricalData } from "@/lib/goldData";
+import { withSecurity } from "@/lib/api-security";
 import type { GoldPrices } from "@/types";
 
 export const dynamic = "force-dynamic";
 
-export async function GET(request: NextRequest) {
+export const GET = withSecurity(async (request: NextRequest) => {
   const period = request.nextUrl.searchParams.get("period") ?? "week";
 
   try {
@@ -42,7 +43,6 @@ export async function GET(request: NextRequest) {
       take: 1000,
     });
 
-    // Get the latest price as base
     const latestRecord = records.length > 0 ? records[records.length - 1] : null;
 
     const prices = latestRecord
@@ -57,7 +57,6 @@ export async function GET(request: NextRequest) {
         } as GoldPrices)
       : undefined;
 
-    // Convert real records to anchor points
     const anchorPoints = records.map((r) => ({
       date: r.createdAt.toISOString(),
       price24: Math.round(r.karat24Buy),
@@ -65,7 +64,6 @@ export async function GET(request: NextRequest) {
       price18: Math.round(r.karat18Buy),
     }));
 
-    // Generate rich data, blending real data with synthetic
     const data = generateHistoricalData(period as any, prices as any, anchorPoints);
 
     return NextResponse.json({
@@ -78,4 +76,4 @@ export async function GET(request: NextRequest) {
     const data = generateHistoricalData(period as any);
     return NextResponse.json({ success: true, data, source: "mock-fallback" });
   }
-}
+}, { rateLimit: "goldPrices" });

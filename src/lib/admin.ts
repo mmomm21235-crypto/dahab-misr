@@ -6,7 +6,7 @@ function getAdminEmail(): string {
     if (process.env.NODE_ENV === "production") {
       throw new Error("ADMIN_EMAIL environment variable is required in production");
     }
-    return "mmomm21235@gmail.com"; // Dev only
+    throw new Error("ADMIN_EMAIL environment variable is not set. Set it in .env.local");
   }
   return email;
 }
@@ -14,7 +14,11 @@ function getAdminEmail(): string {
 export async function isAdmin(): Promise<boolean> {
   const session = await getSession();
   if (!session?.user?.email) return false;
-  return session.user.email === getAdminEmail();
+  try {
+    return session.user.email === getAdminEmail();
+  } catch {
+    return false;
+  }
 }
 
 export async function requireAdmin() {
@@ -26,7 +30,7 @@ export async function requireAdmin() {
 
 export function sanitizeString(input: unknown, maxLength = 500): string {
   if (typeof input !== "string") return "";
-  return input.trim().slice(0, maxLength);
+  return input.trim().slice(0, maxLength).replace(/[<>"'&]/g, "");
 }
 
 export function validatePhone(phone: string): boolean {

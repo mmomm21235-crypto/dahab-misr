@@ -1,12 +1,13 @@
 import { NextResponse } from "next/server";
-import { requireAdmin } from "@/lib/admin";
-import { getAuditLog } from "@/lib/data-protection";
+import { withSecurity } from "@/lib/api-security";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export const GET = withSecurity(async () => {
   try {
+    const { requireAdmin } = await import("@/lib/admin");
     await requireAdmin();
+    const { getAuditLog } = await import("@/lib/data-protection");
     const log = getAuditLog(100);
     return NextResponse.json({ success: true, data: log });
   } catch (error) {
@@ -16,4 +17,4 @@ export async function GET() {
     console.error("GET /api/security/audit error:", error);
     return NextResponse.json({ success: false, error: "Failed to fetch audit log" }, { status: 500 });
   }
-}
+}, { rateLimit: "api", requireAuth: true, requireAdmin: true });

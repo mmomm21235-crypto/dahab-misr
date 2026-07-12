@@ -1,13 +1,20 @@
 import { NextResponse } from "next/server";
 import { logAlertTrigger, getAlertHistory } from "@/lib/db/alert-history";
 import { withSecurity } from "@/lib/api-security";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
 const VALID_KARATS = ["24", "21", "18", "pound"] as const;
 const VALID_CONDITIONS = ["above", "below"] as const;
 
 export const GET = withSecurity(async () => {
   try {
-    const history = await getAlertHistory(undefined, 50);
+    const session = await getServerSession(authOptions);
+    const userId = (session?.user as { id?: string })?.id;
+    if (!userId) {
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
+    }
+    const history = await getAlertHistory(userId, 50);
     return NextResponse.json({ success: true, data: history });
   } catch (error) {
     console.error("GET alert history error:", error);
@@ -16,10 +23,16 @@ export const GET = withSecurity(async () => {
       { status: 500 }
     );
   }
-}, { rateLimit: "api" });
+}, { rateLimit: "api", requireAuth: true });
 
 export const POST = withSecurity(async (req) => {
   try {
+    const session = await getServerSession(authOptions);
+    const userId = (session?.user as { id?: string })?.id;
+    if (!userId) {
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
+    }
+
     const body = await req.json();
     if (
       !body ||
@@ -49,4 +62,4 @@ export const POST = withSecurity(async (req) => {
       { status: 500 }
     );
   }
-}, { rateLimit: "api" });
+}, { rateLimit: "api", requireAuth: true });

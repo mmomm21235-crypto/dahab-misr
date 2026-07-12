@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 export const metadata: Metadata = {
   title: "الرسوم البيانية",
   description: "تتبع حركة أسعار الذهب عبر الزمن",
+  alternates: { canonical: "/charts" },
   openGraph: {
     title: "الرسوم البيانية | ذهب مصر",
     description: "تتبع حركة أسعار الذهب عبر الزمن",

@@ -1,8 +1,8 @@
 const REQUIRED_ENV_VARS = [
   "DATABASE_URL",
   "NEXTAUTH_SECRET",
-  "GOOGLE_CLIENT_ID",
-  "GOOGLE_CLIENT_SECRET",
+  "AUTH_GOOGLE_ID",
+  "AUTH_GOOGLE_SECRET",
 ];
 
 const SENSITIVE_ENV_VARS = [
@@ -11,6 +11,7 @@ const SENSITIVE_ENV_VARS = [
   "GOLDAPI_KEY",
   "NEWS_DATA_API_KEY",
   "ADMIN_EMAIL",
+  "ENCRYPTION_KEY",
 ];
 
 export function checkEnvironment(): { valid: boolean; missing: string[] } {
@@ -25,15 +26,8 @@ export function getSafeEnvInfo() {
     hasAuth: !!process.env.NEXTAUTH_SECRET,
     hasGoldApi: !!process.env.GOLDAPI_KEY,
     hasNewsApi: !!process.env.NEWS_DATA_API_KEY,
-    hasGoogleAuth: !!process.env.GOOGLE_CLIENT_ID,
+    hasGoogleAuth: !!process.env.AUTH_GOOGLE_ID,
     hasVapid: !!process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY,
+    hasEncryption: !!process.env.ENCRYPTION_KEY,
   };
-}
-
-export function validateClientEnv() {
-  if (typeof window !== "undefined") {
-    const publicKeys = Object.keys(
-      window.__NEXT_DATA__?.props?.pageProps || {}
-    );
-  }
 }

@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
-import { getSession } from "@/lib/auth";
+import { withSecurity } from "@/lib/api-security";
 import { prisma } from "@/lib/db/prisma";
 
-export async function POST() {
+export const POST = withSecurity(async () => {
   try {
+    const { getSession } = await import("@/lib/auth");
     const session = await getSession();
     const userId = (session?.user as { id?: string })?.id;
     if (!userId) {
@@ -23,4 +24,4 @@ export async function POST() {
     }
     return NextResponse.json({ success: false, error: "Internal error" }, { status: 500 });
   }
-}
+}, { rateLimit: "push", requireAuth: true });

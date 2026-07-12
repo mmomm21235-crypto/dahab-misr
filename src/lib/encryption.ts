@@ -5,14 +5,14 @@ const ALGORITHM = "aes-256-gcm";
 function getKey(): Buffer {
   const envKey = process.env.ENCRYPTION_KEY;
   if (!envKey) {
-    // In production, this will throw if ENCRYPTION_KEY is not set
     if (process.env.NODE_ENV === "production") {
       throw new Error("ENCRYPTION_KEY environment variable is required in production");
     }
-    // Dev fallback only - never use in production
     return crypto.scryptSync("dahab-misr-dev-key-not-for-prod", "salt-dahab-misr", 32);
   }
-  return crypto.scryptSync(envKey, "salt-dahab-misr", 32);
+  // Use a per-environment salt to prevent cross-environment attacks
+  const salt = `dahab-misr-${process.env.NODE_ENV || "development"}`;
+  return crypto.scryptSync(envKey, salt, 32);
 }
 
 const KEY = getKey();

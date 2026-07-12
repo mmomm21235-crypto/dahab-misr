@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db/prisma";
-import { requireAdmin } from "@/lib/admin";
+import { withSecurity } from "@/lib/api-security";
 
-export async function GET() {
+export const GET = withSecurity(async () => {
   try {
+    const { requireAdmin } = await import("@/lib/admin");
     await requireAdmin();
 
     const shops = await prisma.shop.findMany({
@@ -18,4 +19,4 @@ export async function GET() {
     console.error("GET /api/shops-admin error:", error);
     return NextResponse.json({ success: false, error: "Failed to fetch shops" }, { status: 500 });
   }
-}
+}, { rateLimit: "shops", requireAuth: true, requireAdmin: true });

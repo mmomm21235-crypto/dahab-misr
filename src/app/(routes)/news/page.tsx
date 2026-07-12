@@ -4,6 +4,7 @@ import { NewsContent } from "@/components/news/NewsContent";
 export const metadata: Metadata = {
   title: "أخبار الذهب والاقتصاد",
   description: "آخر أخبار الذهب والدولار والاقتصاد المصري",
+  alternates: { canonical: "/news" },
   openGraph: {
     title: "أخبار الذهب والاقتصاد | ذهب مصر",
     description: "آخر أخبار الذهب والدولار والاقتصاد المصري",

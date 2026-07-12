@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "حول التطبيق",
   description: "معلومات عن تطبيق ذهب مصر - أسعار الذهب في مصر لحظة بلحظة",
+  alternates: { canonical: "/about" },
 };
 
 export default function AboutPage() {

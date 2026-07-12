@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 export const metadata: Metadata = {
   title: "حاسبة الذهب",
   description: "احسب قيمة ذهبك بسهولة - شراء وبيع جميع العيارات",
+  alternates: { canonical: "/calculator" },
   openGraph: {
     title: "حاسبة الذهب | ذهب مصر",
     description: "احسب قيمة ذهبك بسهولة - شراء وبيع جميع العيارات",

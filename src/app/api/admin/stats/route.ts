@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db/prisma";
-import { requireAdmin } from "@/lib/admin";
+import { withSecurity } from "@/lib/api-security";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export const GET = withSecurity(async () => {
   try {
+    const { requireAdmin } = await import("@/lib/admin");
     await requireAdmin();
 
     const [totalUsers, totalAlerts, totalShops, totalPortfolio, totalNews, latestPrice] =
@@ -28,7 +29,6 @@ export async function GET() {
         targetPrice: true,
         condition: true,
         triggeredAt: true,
-        user: { select: { name: true, email: true } },
       },
     });
 
@@ -51,4 +51,4 @@ export async function GET() {
     console.error("GET /api/admin/stats error:", error);
     return NextResponse.json({ success: false, error: "Failed to fetch stats" }, { status: 500 });
   }
-}
+}, { rateLimit: "api", requireAuth: true, requireAdmin: true });

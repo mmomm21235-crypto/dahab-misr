@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 export const metadata: Metadata = {
   title: "محفظتي",
   description: "تتبع استثماراتك في الذهب - سعر الشراء والقيمة الحالية والربح والخسارة",
+  alternates: { canonical: "/portfolio" },
   openGraph: {
     title: "محفظتي | ذهب مصر",
     description: "تتبع استثماراتك في الذهب - سعر الشراء والقيمة الحالية والربح والخسارة",

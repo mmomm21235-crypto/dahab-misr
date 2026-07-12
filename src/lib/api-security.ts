@@ -12,13 +12,22 @@ interface SecurityOptions {
   validateBody?: (body: any) => { valid: boolean; error?: string };
 }
 
+function getClientIp(req: NextRequest): string {
+  // In Vercel, x-forwarded-for is trusted. Take only the first IP.
+  const forwardedFor = req.headers.get("x-forwarded-for");
+  if (forwardedFor) {
+    return forwardedFor.split(",")[0].trim();
+  }
+  return req.headers.get("x-real-ip") || "unknown";
+}
+
 export function withSecurity(
   handler: (req: NextRequest, context?: any) => Promise<Response>,
   options: SecurityOptions = {}
 ) {
   return async (req: NextRequest, context?: any): Promise<Response> => {
     if (options.rateLimit) {
-      const ip = req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip") || "unknown";
+      const ip = getClientIp(req);
       const identifier = `${ip}:${options.rateLimit}`;
       const result = checkRateLimit(identifier, RATE_LIMITS[options.rateLimit]);
       if (!result.allowed) {
@@ -34,8 +43,8 @@ export function withSecurity(
       if (options.requireAdmin) {
         const { prisma } = await import("./db/prisma");
         const user = await prisma.user.findUnique({ where: { email: session.user.email } });
-        const adminEmail = process.env.ADMIN_EMAIL || "mmomm21235@gmail.com";
-        if (!user || session.user.email !== adminEmail) {
+        const adminEmail = process.env.ADMIN_EMAIL;
+        if (!adminEmail || !user || session.user.email !== adminEmail) {
           return new Response(JSON.stringify({ error: "Forbidden" }), { status: 403 });
         }
       }

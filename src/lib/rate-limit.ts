@@ -1,4 +1,33 @@
-const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
+// Distributed-safe rate limiting using globalThis for serverless persistence
+// In Vercel serverless, globalThis persists across invocations within the same instance
+// For true distributed limiting, migrate to Upstash Redis
+
+interface RateLimitEntry {
+  count: number;
+  resetTime: number;
+}
+
+declare global {
+  var __rateLimitMap: Map<string, RateLimitEntry> | undefined;
+}
+
+const rateLimitMap: Map<string, RateLimitEntry> = globalThis.__rateLimitMap ??= new Map();
+
+// Cleanup old entries every 5 minutes to prevent memory leaks
+declare global {
+  var __rateLimitCleanup: ReturnType<typeof setInterval> | undefined;
+}
+
+if (!globalThis.__rateLimitCleanup) {
+  globalThis.__rateLimitCleanup = setInterval(() => {
+    const now = Date.now();
+    for (const [key, entry] of rateLimitMap) {
+      if (now > entry.resetTime) {
+        rateLimitMap.delete(key);
+      }
+    }
+  }, 5 * 60 * 1000);
+}
 
 export interface RateLimitConfig {
   windowMs: number;
@@ -42,7 +71,7 @@ export function createRateLimitResponse(resetTime: number): Response {
 }
 
 export const RATE_LIMITS = {
-  api: { windowMs: 60 * 1000, maxRequests: 60, message: "Too many API requests" },
+  api: { windowMs: 60 * 1000, maxRequests: 30, message: "Too many API requests" },
   auth: { windowMs: 15 * 60 * 1000, maxRequests: 10, message: "Too many auth attempts" },
   goldPrices: { windowMs: 60 * 1000, maxRequests: 30, message: "Too many price requests" },
   push: { windowMs: 60 * 1000, maxRequests: 5, message: "Too many push requests" },

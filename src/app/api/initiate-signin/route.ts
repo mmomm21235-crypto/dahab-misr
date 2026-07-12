@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { withSecurity } from "@/lib/api-security";
 
 function parseCookies(setCookie: string): string {
   return setCookie
@@ -7,6 +8,8 @@ function parseCookies(setCookie: string): string {
     .filter(Boolean)
     .join("; ");
 }
+
+const ALLOWED_HOSTS = ["dahab-misr.vercel.app", "localhost"];
 
 async function handleSignin() {
   const base = process.env.NEXTAUTH_URL || "https://dahab-misr.vercel.app";
@@ -36,6 +39,16 @@ async function handleSignin() {
       return NextResponse.redirect(new URL("/auth/signin?error=AuthFailed", base), { status: 303 });
     }
 
+    // Validate redirect URL to prevent open redirect
+    try {
+      const url = new URL(redirectUrl);
+      if (!ALLOWED_HOSTS.includes(url.hostname) && !url.hostname.endsWith(".vercel.app")) {
+        return NextResponse.redirect(new URL("/auth/signin?error=InvalidRedirect", base), { status: 303 });
+      }
+    } catch {
+      return NextResponse.redirect(new URL("/auth/signin?error=InvalidRedirect", base), { status: 303 });
+    }
+
     const response = NextResponse.redirect(redirectUrl, { status: 303 });
     const setCookie = signinRes.headers.get("set-cookie");
     if (setCookie) {
@@ -49,10 +62,10 @@ async function handleSignin() {
   }
 }
 
-export async function GET() {
+export const GET = withSecurity(async () => {
   return handleSignin();
-}
+}, { rateLimit: "auth" });
 
-export async function POST() {
+export const POST = withSecurity(async () => {
   return handleSignin();
-}
+}, { rateLimit: "auth" });
