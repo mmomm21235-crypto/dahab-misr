@@ -1,0 +1,152 @@
+{
+  "common": {
+    "appName": "Gold Egypt",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "search": "Search",
+    "close": "Close",
+    "confirm": "Confirm",
+    "back": "Back",
+    "next": "Next",
+    "noData": "No data available",
+    "refresh": "Refresh",
+    "settings": "Settings",
+    "language": "Language",
+    "arabic": "العربية",
+    "english": "English"
+  },
+  "nav": {
+    "home": "Home",
+    "calculator": "Calculator",
+    "charts": "Charts",
+    "news": "News",
+    "alerts": "Alerts",
+    "shops": "Shops",
+    "settings": "Settings",
+    "about": "About",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Use",
+    "advertise": "Advertise"
+  },
+  "home": {
+    "title": "Gold Prices in Egypt",
+    "subtitle": "Live and updated prices",
+    "lastUpdate": "Last updated",
+    "prices": {
+      "gold24": "24K Gold",
+      "gold21": "21K Gold",
+      "gold18": "18K Gold",
+      "pound": "Gold Pound",
+      "dollar": "US Dollar"
+    },
+    "buy": "Buy",
+    "sell": "Sell",
+    "change": "Change",
+    "quickStats": "Quick Stats",
+    "latestNews": "Latest News",
+    "viewAll": "View All"
+  },
+  "calculator": {
+    "title": "Gold Calculator",
+    "selectKarat": "Select Karat",
+    "weight": "Weight (grams)",
+    "craftingFee": "Crafting Fee (%)",
+    "calculate": "Calculate",
+    "result": "Result",
+    "buyValue": "Buy Value",
+    "sellValue": "Sell Value",
+    "totalWeight": "Total Weight",
+    "karats": {
+      "24": "24K",
+      "21": "21K",
+      "18": "18K",
+      "14": "14K"
+    }
+  },
+  "charts": {
+    "title": "Price Charts",
+    "periods": {
+      "day": "Day",
+      "week": "Week",
+      "month": "Month",
+      "3months": "3 Months",
+      "6months": "6 Months",
+      "year": "Year"
+    },
+    "price": "Price",
+    "date": "Date"
+  },
+  "news": {
+    "title": "Gold & Economy News",
+    "categories": {
+      "all": "All",
+      "gold": "Gold",
+      "dollar": "Dollar",
+      "economy": "Economy"
+    },
+    "readMore": "Read More",
+    "noNews": "No news available",
+    "publishedAt": "Published at"
+  },
+  "alerts": {
+    "title": "Price Alerts",
+    "create": "Create Alert",
+    "selectKarat": "Select Karat",
+    "targetPrice": "Target Price",
+    "condition": "Condition",
+    "above": "Above",
+    "below": "Below",
+    "active": "Active",
+    "inactive": "Inactive",
+    "noAlerts": "No alerts",
+    "deleteConfirm": "Are you sure you want to delete this alert?"
+  },
+  "shops": {
+    "title": "Gold Shop Directory",
+    "search": "Search shops...",
+    "noShops": "No shops available",
+    "addShop": "Add your shop",
+    "contactUs": "Contact us",
+    "whatsapp": "WhatsApp",
+    "phone": "Phone",
+    "location": "Location",
+    "address": "Address"
+  },
+  "settings": {
+    "title": "Settings",
+    "theme": "Theme",
+    "themes": {
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "notifications": "Notifications",
+    "enableNotifications": "Enable Notifications",
+    "data": "Data",
+    "exportCSV": "Export CSV",
+    "clearCache": "Clear Cache",
+    "install": "Install App",
+    "appInfo": "App Info",
+    "version": "Version",
+    "developer": "Developer"
+  },
+  "auth": {
+    "signIn": "Sign In",
+    "signOut": "Sign Out",
+    "welcome": "Welcome",
+    "signInWithGoogle": "Sign in with Google"
+  },
+  "footer": {
+    "about": "About Gold Egypt",
+    "aboutText": "A specialized app for tracking gold prices in Egypt in real-time",
+    "quickLinks": "Quick Links",
+    "contact": "Contact Us",
+    "rights": "All rights reserved"
+  }
+}

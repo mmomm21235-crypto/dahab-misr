@@ -1,0 +1,152 @@
+{
+  "common": {
+    "appName": "ذهب مصر",
+    "loading": "جاري التحميل...",
+    "error": "حدث خطأ",
+    "retry": "إعادة المحاولة",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "add": "إضافة",
+    "search": "بحث",
+    "close": "إغلاق",
+    "confirm": "تأكيد",
+    "back": "رجوع",
+    "next": "التالي",
+    "noData": "لا توجد بيانات",
+    "refresh": "تحديث",
+    "settings": "الإعدادات",
+    "language": "اللغة",
+    "arabic": "العربية",
+    "english": "English"
+  },
+  "nav": {
+    "home": "الرئيسية",
+    "calculator": "الحاسبة",
+    "charts": "الرسوم البيانية",
+    "news": "الأخبار",
+    "alerts": "التنبيهات",
+    "shops": "المحلات",
+    "settings": "الإعدادات",
+    "about": "عن التطبيق",
+    "privacy": "سياسة الخصوصية",
+    "terms": "شروط الاستخدام",
+    "advertise": "أعلن معنا"
+  },
+  "home": {
+    "title": "أسعار الذهب في مصر",
+    "subtitle": "أسعار حية ومحدثة",
+    "lastUpdate": "آخر تحديث",
+    "prices": {
+      "gold24": "ذهب عيار 24",
+      "gold21": "ذهب عيار 21",
+      "gold18": "ذهب عيار 18",
+      "pound": "جنيه ذهب",
+      "dollar": "دولار أمريكي"
+    },
+    "buy": "شراء",
+    "sell": "بيع",
+    "change": "التغيير",
+    "quickStats": "إحصائيات سريعة",
+    "latestNews": "آخر الأخبار",
+    "viewAll": "عرض الكل"
+  },
+  "calculator": {
+    "title": "حاسبة الذهب",
+    "selectKarat": "اختر العيار",
+    "weight": "الوزن (جرام)",
+    "craftingFee": "رسوم الصياغة (%)",
+    "calculate": "احسب",
+    "result": "النتيجة",
+    "buyValue": "قيمة الشراء",
+    "sellValue": "قيمة البيع",
+    "totalWeight": "إجمالي الوزن",
+    "karats": {
+      "24": "عيار 24",
+      "21": "عيار 21",
+      "18": "عيار 18",
+      "14": "عيار 14"
+    }
+  },
+  "charts": {
+    "title": "الرسوم البيانية",
+    "periods": {
+      "day": "يوم",
+      "week": "أسبوع",
+      "month": "شهر",
+      "3months": "3 أشهر",
+      "6months": "6 أشهر",
+      "year": "سنة"
+    },
+    "price": "السعر",
+    "date": "التاريخ"
+  },
+  "news": {
+    "title": "أخبار الذهب والاقتصاد",
+    "categories": {
+      "all": "الكل",
+      "gold": "ذهب",
+      "dollar": "دولار",
+      "economy": "اقتصاد"
+    },
+    "readMore": "اقرأ المزيد",
+    "noNews": "لا توجد أخبار حالياً",
+    "publishedAt": "نُشر في"
+  },
+  "alerts": {
+    "title": "تنبيهات الأسعار",
+    "create": "إنشاء تنبيه",
+    "selectKarat": "اختر العيار",
+    "targetPrice": "السعر المستهدف",
+    "condition": "الشرط",
+    "above": "فوق",
+    "below": "تحت",
+    "active": "نشط",
+    "inactive": "غير نشط",
+    "noAlerts": "لا توجد تنبيهات",
+    "deleteConfirm": "هل أنت متأكد من حذف هذا التنبيه؟"
+  },
+  "shops": {
+    "title": "دليل محلات الذهب",
+    "search": "بحث عن محل...",
+    "noShops": "لا توجد محلات حالياً",
+    "addShop": "أضف محلك",
+    "contactUs": "تواصل معنا",
+    "whatsapp": "واتساب",
+    "phone": "هاتف",
+    "location": "الموقع",
+    "address": "العنوان"
+  },
+  "settings": {
+    "title": "الإعدادات",
+    "theme": "المظهر",
+    "themes": {
+      "light": "فاتح",
+      "dark": "داكن",
+      "system": "تلقائي"
+    },
+    "notifications": "الإشعارات",
+    "enableNotifications": "تفعيل الإشعارات",
+    "data": "البيانات",
+    "exportCSV": "تصدير CSV",
+    "clearCache": "مسح الكاش",
+    "install": "تثبيت التطبيق",
+    "appInfo": "معلومات التطبيق",
+    "version": "الإصدار",
+    "developer": "المطور"
+  },
+  "auth": {
+    "signIn": "تسجيل الدخول",
+    "signOut": "تسجيل الخروج",
+    "welcome": "مرحباً",
+    "signInWithGoogle": "تسجيل الدخول بجوجل"
+  },
+  "footer": {
+    "about": "عن ذهب مصر",
+    "aboutText": "تطبيق متخصص في متابعة أسعار الذهب في مصر لحظة بلحظة",
+    "quickLinks": "روابط سريعة",
+    "contact": "تواصل معنا",
+    "rights": "جميع الحقوق محفوظة"
+  }
+}

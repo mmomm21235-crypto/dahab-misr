@@ -1,0 +1,39 @@
+{
+  "packageId": "com.dahabmisr.app",
+  "host": "https://dahab-misr.vercel.app",
+  "name": "ذهب مصر",
+  "launcherName": "ذهب مصر",
+  "display": "standalone",
+  "themeColor": "#f59e0b",
+  "backgroundColor": "#0a0a0a",
+  "orientation": "portrait",
+  "startUrl": "/",
+  "appVersionName": "1.0.0",
+  "appVersionCode": 1,
+  "shortcuts": [
+    {
+      "name": "حاسبة الذهب",
+      "shortName": "الحاسبة",
+      "url": "/calculator"
+    },
+    {
+      "name": "أسعار الذهب",
+      "shortName": "الأسعار",
+      "url": "/"
+    }
+  ],
+  "generatorApp": "bubblewrap-cli",
+  "fallbackType": "customtabs",
+  "features": {
+    "playBilling": false,
+    "locationDelegation": false
+  },
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "enableNotifications": true,
+  "signingKey": {
+    "alias": "android",
+    "keyAlias": "android"
+  }
+}

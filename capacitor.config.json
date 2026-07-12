@@ -1,0 +1,26 @@
+{
+  "appId": "com.dahabmisr.app",
+  "appName": "ذهب مصر",
+  "webDir": "out",
+  "server": {
+    "androidScheme": "https",
+    "url": "https://dahab-misr.vercel.app",
+    "cleartext": false,
+    "allowNavigation": ["dahab-misr.vercel.app", "*.vercel.app"]
+  },
+  "android": {
+    "allowMixedContent": false
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 2000,
+      "backgroundColor": "#1a1a1a",
+      "showSpinner": true,
+      "spinnerColor": "#f59e0b"
+    },
+    "StatusBar": {
+      "style": "DARK",
+      "backgroundColor": "#1a1a1a"
+    }
+  }
+}
