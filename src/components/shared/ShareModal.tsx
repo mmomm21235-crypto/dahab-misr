@@ -69,24 +69,32 @@ export function ShareModal({ isOpen, onClose, title, text, url }: ShareModalProp
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4" dir="rtl">
+    <div
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4"
+      dir="rtl"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="share-modal-title"
+    >
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
       <div className="relative w-full max-w-sm bg-card rounded-2xl border border-border shadow-2xl animate-slide-up">
         <div className="flex items-center justify-between p-4 border-b border-border/50">
-          <h3 className="font-bold text-sm">مشاركة</h3>
-          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-muted transition-colors">
+          <h3 id="share-modal-title" className="font-bold text-sm">مشاركة</h3>
+          <button
+            onClick={onClose}
+            className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-muted transition-colors"
+            aria-label="إغلاق"
+          >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         <div className="p-4 space-y-3">
-          {/* Preview */}
           <div className="p-3 rounded-xl bg-muted/50 border border-border/50">
             <p className="text-xs text-muted-foreground line-clamp-2">{text}</p>
             <p className="text-[11px] text-blue-500 mt-1 truncate">{shareUrl}</p>
           </div>
 
-          {/* Share buttons */}
           <div className="grid grid-cols-4 gap-3">
             {shareOptions.map(({ label, icon: Icon, color, href }) => (
               <a
@@ -104,10 +112,9 @@ export function ShareModal({ isOpen, onClose, title, text, url }: ShareModalProp
             ))}
           </div>
 
-          {/* Copy button */}
           <button
             onClick={handleCopy}
-            className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-border bg-muted/50 text-sm font-bold text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+            className="w-full flex items-center justify-center gap-2 py-3 min-h-[44px] rounded-xl border border-border bg-muted/50 text-sm font-bold text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
           >
             <Copy className="w-4 h-4" />
             نسخ الرابط

@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useMemo } from "react";
 import { useGoldContext } from "@/context/GoldContext";
 import { formatPrice, cn } from "@/lib/utils";
 import { motion } from "framer-motion";
@@ -8,8 +9,33 @@ import { TrendingUp, TrendingDown, DollarSign, BarChart3 } from "lucide-react";
 
 const COLORS = ["#f59e0b", "#d97706", "#b45309", "#92400e"];
 
-export function HomeStats() {
+export const HomeStats = React.memo(function HomeStats() {
   const { prices, isLoading } = useGoldContext();
+
+  const pieData = useMemo(() => {
+    if (!prices) return [];
+    return [
+      { name: "عيار 24", value: prices.karat24.buyPrice },
+      { name: "عيار 21", value: prices.karat21.buyPrice },
+      { name: "عيار 18", value: prices.karat18.buyPrice },
+      { name: "الجنيه", value: prices.pound.buyPrice / 8 },
+    ];
+  }, [prices]);
+
+  const allChanges = useMemo(() => {
+    if (!prices) return [];
+    return [
+      { label: "عيار 24", change: prices.karat24.change },
+      { label: "عيار 21", change: prices.karat21.change },
+      { label: "عيار 18", change: prices.karat18.change },
+      { label: "الجنيه", change: prices.pound.change },
+    ];
+  }, [prices]);
+
+  const avgChange = useMemo(() => {
+    if (allChanges.length === 0) return 0;
+    return allChanges.reduce((sum, c) => sum + c.change, 0) / allChanges.length;
+  }, [allChanges]);
 
   if (isLoading || !prices) {
     return (
@@ -19,23 +45,6 @@ export function HomeStats() {
       </div>
     );
   }
-
-  const pieData = [
-    { name: "عيار 24", value: prices.karat24.buyPrice },
-    { name: "عيار 21", value: prices.karat21.buyPrice },
-    { name: "عيار 18", value: prices.karat18.buyPrice },
-    { name: "الجنيه", value: prices.pound.buyPrice / 8 },
-  ];
-
-  const allChanges = [
-    { label: "عيار 24", change: prices.karat24.change },
-    { label: "عيار 21", change: prices.karat21.change },
-    { label: "عيار 18", change: prices.karat18.change },
-    { label: "الجنيه", change: prices.pound.change },
-  ];
-
-  const avgChange =
-    allChanges.reduce((sum, c) => sum + c.change, 0) / allChanges.length;
 
   return (
     <motion.div
@@ -94,7 +103,7 @@ export function HomeStats() {
                   style={{ background: COLORS[i] }}
                 />
                 <span className="text-muted-foreground">{item.name}</span>
-                <span className="font-bold mr-auto">
+                <span className="font-bold ms-auto">
                   {formatPrice(item.value)}
                 </span>
               </div>
@@ -159,4 +168,4 @@ export function HomeStats() {
       </motion.div>
     </motion.div>
   );
-}
+});

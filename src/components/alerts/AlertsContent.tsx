@@ -544,10 +544,12 @@ export function AlertsContent({ isAuthenticated = false }: { isAuthenticated?: b
                     </div>
                     <div className="flex items-center gap-2 flex-shrink-0">
                       <button onClick={() => handleToggle(alert.id, alert.isActive)}
-                        className={cn("w-9 h-9 rounded-xl flex items-center justify-center transition-colors", alert.isActive ? "bg-gold-500/10 text-gold-600 dark:text-gold-400" : "bg-muted text-muted-foreground")}
+                        aria-label={alert.isActive ? "تعطيل التنبيه" : "تفعيل التنبيه"}
+                        className={cn("w-11 h-11 rounded-xl flex items-center justify-center transition-colors", alert.isActive ? "bg-gold-500/10 text-gold-600 dark:text-gold-400" : "bg-muted text-muted-foreground")}
                       >{alert.isActive ? <Bell className="w-4 h-4" /> : <BellOff className="w-4 h-4" />}</button>
                       <button onClick={() => handleDelete(alert.id)}
-                        className="w-9 h-9 rounded-xl flex items-center justify-center bg-red-500/10 text-red-500 hover:bg-red-500/20 transition-colors"
+                        aria-label="حذف التنبيه"
+                        className="w-11 h-11 rounded-xl flex items-center justify-center bg-red-500/10 text-red-500 hover:bg-red-500/20 transition-colors"
                       ><Trash2 className="w-4 h-4" /></button>
                     </div>
                   </div>

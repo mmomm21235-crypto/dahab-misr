@@ -58,13 +58,13 @@ export function HomeContent() {
               <TrendingUp className="w-4 h-4" />
               الرسوم البيانية
             </Link>
-            <button onClick={() => setShowShare(true)} className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white text-sm font-medium transition-all duration-200 border border-white/10 hover:border-white/30 mr-auto">
+            <button onClick={() => setShowShare(true)} aria-label="مشاركة الأسعار" className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white text-sm font-medium transition-all duration-200 border border-white/10 hover:border-white/30 ms-auto min-h-[44px] min-w-[44px] justify-center">
               <Share2 className="w-4 h-4" />
             </button>
           </div>
         </div>
-        <div className="absolute -top-8 -left-8 w-40 h-40 rounded-full bg-gold-600/20 blur-2xl animate-pulse-glow" />
-        <div className="absolute -bottom-6 -right-6 w-32 h-32 rounded-full bg-amber-400/20 blur-2xl animate-pulse-glow" style={{ animationDelay: "1.5s" }} />
+        <div className="absolute -top-8 -end-8 w-40 h-40 rounded-full bg-gold-600/20 blur-2xl animate-pulse-glow" />
+        <div className="absolute -bottom-6 -start-6 w-32 h-32 rounded-full bg-amber-400/20 blur-2xl animate-pulse-glow" style={{ animationDelay: "1.5s" }} />
       </div>
 
       <div className="animate-fade-in stagger-1">

@@ -40,7 +40,13 @@ export function NewsPreview() {
       .catch(() => {});
   }, []);
 
-  if (articles.length === 0) return null;
+  if (articles.length === 0) {
+    return (
+      <p className="text-sm text-muted-foreground text-center py-4">
+        لا توجد أخبار متاحة حالياً
+      </p>
+    );
+  }
 
   return (
     <div className="space-y-3">

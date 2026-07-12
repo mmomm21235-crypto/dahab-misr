@@ -87,3 +87,51 @@ export function debounce<T extends (...args: unknown[]) => unknown>(
     timeoutId = setTimeout(() => fn(...args), ms);
   };
 }
+
+export function getKaratLabelString(karat: string | number): string {
+  const labels: Record<string, string> = {
+    "24": "عيار 24",
+    "21": "عيار 21",
+    "18": "عيار 18",
+    "14": "عيار 14",
+    pound: "الجنيه الذهب",
+  };
+  return labels[String(karat)] ?? `عيار ${karat}`;
+}
+
+export function getPrice(
+  karat: number,
+  prices: {
+    karat24: { buyPrice: number };
+    karat21: { buyPrice: number };
+    karat18: { buyPrice: number };
+  } | null,
+  PURITY?: Record<number, number>
+): number {
+  if (!prices) return 0;
+  if (karat === 24) return prices.karat24.buyPrice;
+  if (karat === 21) return prices.karat21.buyPrice;
+  if (karat === 18) return prices.karat18.buyPrice;
+  if (PURITY && PURITY[karat]) return prices.karat21.buyPrice * PURITY[karat];
+  return prices.karat21.buyPrice;
+}
+
+export const CATEGORY_COLORS: Record<string, string> = {
+  gold: "bg-gold-500/10 text-gold-600 dark:text-gold-400 border-gold-500/20",
+  dollar: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20",
+  economy: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20",
+};
+
+export const CATEGORY_LABELS: Record<string, string> = {
+  gold: "ذهب",
+  dollar: "دولار",
+  economy: "اقتصاد",
+};
+
+export function formatTimeAgo(dateString: string): string {
+  const diff = Math.floor((Date.now() - new Date(dateString).getTime()) / 1000);
+  if (diff < 60) return "الآن";
+  if (diff < 3600) return `منذ ${Math.floor(diff / 60)} دقيقة`;
+  if (diff < 86400) return `منذ ${Math.floor(diff / 3600)} ساعة`;
+  return `منذ ${Math.floor(diff / 86400)} يوم`;
+}

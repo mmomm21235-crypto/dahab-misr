@@ -318,11 +318,11 @@ export function PortfolioContent() {
                   </p>
                 </div>
                 <div className="flex flex-col gap-1">
-                  <button onClick={() => startEdit(h)} className="p-1.5 rounded-lg hover:bg-muted transition-colors">
-                    <Edit3 className="w-3.5 h-3.5 text-muted-foreground" />
+                  <button onClick={() => startEdit(h)} aria-label="تعديل" className="p-2.5 rounded-lg hover:bg-muted transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center">
+                    <Edit3 className="w-4 h-4 text-muted-foreground" />
                   </button>
-                  <button onClick={() => handleDelete(h.id)} className="p-1.5 rounded-lg hover:bg-red-500/10 transition-colors">
-                    <Trash2 className="w-3.5 h-3.5 text-red-500" />
+                  <button onClick={() => handleDelete(h.id)} aria-label="حذف" className="p-2.5 rounded-lg hover:bg-red-500/10 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center">
+                    <Trash2 className="w-4 h-4 text-red-500" />
                   </button>
                 </div>
               </div>

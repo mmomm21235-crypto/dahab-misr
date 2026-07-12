@@ -44,7 +44,11 @@ export function MiniChart() {
   }
 
   if (data.length === 0) {
-    return null;
+    return (
+      <div className="gold-card p-4 text-center text-muted-foreground text-sm">
+        لا توجد بيانات متاحة حالياً
+      </div>
+    );
   }
 
   const firstPrice = data[0]?.price21 ?? 0;

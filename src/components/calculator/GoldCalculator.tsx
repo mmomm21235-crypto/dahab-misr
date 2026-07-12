@@ -141,7 +141,7 @@ export function GoldCalculator() {
             <input type="number" value={weight} onChange={(e) => setWeight(e.target.value)}
               placeholder="الوزن" min="0" step="0.01" inputMode="decimal"
               className="w-full text-3xl font-black text-center py-5 px-6 rounded-xl bg-muted/50 border-2 border-border focus:outline-none focus:border-gold-500 transition-colors placeholder:text-muted-foreground/30" />
-            <span className="absolute left-5 top-1/2 -translate-y-1/2 text-sm text-muted-foreground/60 font-bold">جرام</span>
+            <span className="absolute end-5 top-1/2 -translate-y-1/2 text-sm text-muted-foreground/80 font-bold">جرام</span>
           </div>
         </div>
         <div className="flex gap-2 mt-3">

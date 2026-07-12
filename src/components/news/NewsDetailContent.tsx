@@ -3,30 +3,8 @@
 import Link from "next/link";
 import { ArrowRight, Clock, Share2, TrendingUp, DollarSign, Newspaper } from "lucide-react";
 import type { NewsArticle } from "@/types";
-import { cn } from "@/lib/utils";
+import { cn, formatDate, CATEGORY_COLORS, CATEGORY_LABELS } from "@/lib/utils";
 import { toast } from "sonner";
-
-const CATEGORY_COLORS: Record<string, string> = {
-  gold: "bg-gold-500/10 text-gold-600 dark:text-gold-400 border-gold-500/20",
-  dollar: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20",
-  economy: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20",
-};
-
-const CATEGORY_LABELS: Record<string, string> = {
-  gold: "ذهب",
-  dollar: "دولار",
-  economy: "اقتصاد",
-};
-
-function formatDate(dateString: string): string {
-  return new Intl.DateTimeFormat("ar-EG", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  }).format(new Date(dateString));
-}
 
 interface Props {
   article: NewsArticle;
@@ -93,7 +71,7 @@ export function NewsDetailContent({ article }: Props) {
         <h1 className="text-xl font-black leading-relaxed">{article.title}</h1>
 
         {/* Summary */}
-        <p className="text-base text-muted-foreground leading-loose font-medium border-r-4 border-gold-500 pr-4">
+        <p className="text-base text-muted-foreground leading-loose font-medium border-s-4 border-gold-500 ps-4">
           {article.summary}
         </p>
 

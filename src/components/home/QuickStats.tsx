@@ -1,12 +1,13 @@
 "use client";
 
+import React from "react";
 import { DollarSign, TrendingUp, Award } from "lucide-react";
 import { useGoldContext } from "@/context/GoldContext";
 import { formatPrice, cn } from "@/lib/utils";
 import { Skeleton } from "@/components/shared/SkeletonCard";
 import { motion } from "framer-motion";
 
-export function QuickStats() {
+export const QuickStats = React.memo(function QuickStats() {
   const { prices, isLoading } = useGoldContext();
 
   if (isLoading || !prices) {
@@ -91,4 +92,4 @@ export function QuickStats() {
       ))}
     </motion.div>
   );
-}
+});

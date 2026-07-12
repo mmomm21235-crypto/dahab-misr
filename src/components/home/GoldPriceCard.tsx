@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { TrendingUp, TrendingDown, Minus } from "lucide-react";
 import type { GoldPrice } from "@/types";
 import {
@@ -7,8 +8,8 @@ import {
   formatPercent,
   getKaratLabel,
   getPriceChangeBg,
+  cn,
 } from "@/lib/utils";
-import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 
 interface GoldPriceCardProps {
@@ -31,7 +32,7 @@ const KARAT_ICONS: Record<string, string> = {
   pound: "ج",
 };
 
-export function GoldPriceCard({
+export const GoldPriceCard = React.memo(function GoldPriceCard({
   price,
   isHighlighted = false,
   animationDelay = 0,
@@ -46,6 +47,9 @@ export function GoldPriceCard({
 
   return (
     <motion.div
+      role="button"
+      tabIndex={0}
+      aria-label={`${getKaratLabel(price.karat)} - سعر الشراء ${formatPrice(price.buyPrice)} ج.م`}
       initial={{ opacity: 0, y: 30, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{
@@ -160,4 +164,4 @@ export function GoldPriceCard({
       </div>
     </motion.div>
   );
-}
+});

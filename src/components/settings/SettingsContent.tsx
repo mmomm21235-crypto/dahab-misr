@@ -289,9 +289,12 @@ export function SettingsContent() {
           action={
             <button
               onClick={handleToggleNotifications}
-              className={cn("w-12 h-6 rounded-full transition-all duration-200 relative", notifications ? "bg-gold-500" : "bg-muted")}
+              role="switch"
+              aria-checked={notifications}
+              aria-label="تنبيهات الأسعار"
+              className={cn("w-12 h-6 rounded-full transition-all duration-200 relative min-h-[44px] min-w-[44px] flex items-center", notifications ? "bg-gold-500" : "bg-muted")}
             >
-              <div className={cn("w-5 h-5 rounded-full bg-white shadow-sm absolute top-0.5 transition-all duration-200", notifications ? "left-6" : "left-0.5")} />
+              <div className={cn("w-5 h-5 rounded-full bg-white shadow-sm absolute top-1/2 -translate-y-1/2 transition-all duration-200", notifications ? "start-6" : "start-0.5")} />
             </button>
           }
         />
@@ -304,9 +307,12 @@ export function SettingsContent() {
           action={
             <button
               onClick={() => updateSettings({ alertSound: !settings.alertSound })}
-              className={cn("w-12 h-6 rounded-full transition-all duration-200 relative", settings.alertSound ? "bg-gold-500" : "bg-muted")}
+              role="switch"
+              aria-checked={settings.alertSound}
+              aria-label="صوت التنبيه"
+              className={cn("w-12 h-6 rounded-full transition-all duration-200 relative min-h-[44px] min-w-[44px] flex items-center", settings.alertSound ? "bg-gold-500" : "bg-muted")}
             >
-              <div className={cn("w-5 h-5 rounded-full bg-white shadow-sm absolute top-0.5 transition-all duration-200", settings.alertSound ? "left-6" : "left-0.5")} />
+              <div className={cn("w-5 h-5 rounded-full bg-white shadow-sm absolute top-1/2 -translate-y-1/2 transition-all duration-200", settings.alertSound ? "start-6" : "start-0.5")} />
             </button>
           }
         />

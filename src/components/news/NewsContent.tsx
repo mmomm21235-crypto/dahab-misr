@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Clock, ChevronLeft, Newspaper, TrendingUp, DollarSign, Globe, RefreshCw, Search, X } from "lucide-react";
 import { MOCK_NEWS } from "@/lib/goldData";
-import { cn } from "@/lib/utils";
+import { cn, CATEGORY_COLORS, CATEGORY_LABELS, formatTimeAgo } from "@/lib/utils";
 import type { NewsArticle } from "@/types";
 
 const CATEGORIES = [
@@ -13,26 +13,6 @@ const CATEGORIES = [
   { value: "dollar", label: "الدولار", Icon: DollarSign },
   { value: "economy", label: "الاقتصاد", Icon: Newspaper },
 ];
-
-const CATEGORY_COLORS: Record<string, string> = {
-  gold: "bg-gold-500/10 text-gold-600 dark:text-gold-400 border-gold-500/20",
-  dollar: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20",
-  economy: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20",
-};
-
-const CATEGORY_LABELS: Record<string, string> = {
-  gold: "ذهب",
-  dollar: "دولار",
-  economy: "اقتصاد",
-};
-
-function formatTimeAgo(dateString: string): string {
-  const diff = Math.floor((Date.now() - new Date(dateString).getTime()) / 1000);
-  if (diff < 60) return "الآن";
-  if (diff < 3600) return `منذ ${Math.floor(diff / 60)} دقيقة`;
-  if (diff < 86400) return `منذ ${Math.floor(diff / 3600)} ساعة`;
-  return `منذ ${Math.floor(diff / 86400)} يوم`;
-}
 
 function NewsCard({ article }: { article: NewsArticle }) {
   return (
@@ -167,16 +147,16 @@ export function NewsContent() {
 
       {/* Search */}
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+        <Search className="absolute start-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="ابحث في الأخبار..."
-          className="w-full pl-10 pr-10 py-3 rounded-xl bg-muted/50 border border-border focus:outline-none focus:border-gold-500 transition-colors text-sm"
+          className="w-full ps-10 pe-10 py-3 rounded-xl bg-muted/50 border border-border focus:outline-none focus:border-gold-500 transition-colors text-sm"
         />
         {searchQuery && (
-          <button onClick={() => setSearchQuery("")} className="absolute right-3 top-1/2 -translate-y-1/2">
+          <button onClick={() => setSearchQuery("")} className="absolute end-3 top-1/2 -translate-y-1/2 p-1 min-w-[44px] min-h-[44px] flex items-center justify-center">
             <X className="w-4 h-4 text-muted-foreground hover:text-foreground" />
           </button>
         )}
@@ -186,7 +166,7 @@ export function NewsContent() {
       {isLoading && (
         <div className="flex items-center justify-center py-8">
           <RefreshCw className="w-5 h-5 animate-spin text-gold-500" />
-          <span className="text-sm text-muted-foreground mr-2">جاري تحميل الأخبار...</span>
+          <span className="text-sm text-muted-foreground ms-2">جاري تحميل الأخبار...</span>
         </div>
       )}
 
