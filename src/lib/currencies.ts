@@ -1,7 +1,7 @@
 export const CURRENCIES = [
   { code: "EGP", symbol: "ج.م", name: "الجنيه المصري", locale: "ar-EG", flag: "🇪🇬" },
   { code: "USD", symbol: "$", name: "الدولار الأمريكي", locale: "en-US", flag: "🇺🇸" },
-  { code: "EUR", symbol: "€", name: "اليورو", locale: "de-DE", flag: "🇪🇺" },
+  { code: "EUR", symbol: "€", name: "اليورو", locale: "ar-EG", flag: "🇪🇺" },
   { code: "GBP", symbol: "£", name: "الجنيه الإسترليني", locale: "en-GB", flag: "🇬🇧" },
   { code: "SAR", symbol: "ر.س", name: "الريال السعودي", locale: "ar-SA", flag: "🇸🇦" },
   { code: "AED", symbol: "د.إ", name: "الدرهم الإماراتي", locale: "ar-AE", flag: "🇦🇪" },

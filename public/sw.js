@@ -9,6 +9,7 @@ const PRECACHE_URLS = [
   "/news",
   "/alerts",
   "/shops",
+  "/about",
   "/settings",
   "/offline.html",
   "/manifest.json",

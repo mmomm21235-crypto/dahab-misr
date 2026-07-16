@@ -8,6 +8,11 @@ export async function getNews(): Promise<NewsArticle[]> {
       take: 20,
     });
 
+    if (articles.length === 0) {
+      const { MOCK_NEWS } = await import("@/lib/goldData");
+      return MOCK_NEWS;
+    }
+
     return articles.map((a) => ({
       id: a.id,
       title: a.title,
@@ -28,7 +33,10 @@ export async function getNews(): Promise<NewsArticle[]> {
 export async function getNewsById(id: string): Promise<NewsArticle | null> {
   try {
     const article = await prisma.newsArticle.findUnique({ where: { id } });
-    if (!article) return null;
+    if (!article) {
+      const { MOCK_NEWS } = await import("@/lib/goldData");
+      return MOCK_NEWS.find((n) => n.id === id) ?? null;
+    }
 
     return {
       id: article.id,

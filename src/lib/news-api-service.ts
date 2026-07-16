@@ -31,6 +31,30 @@ function detectCategory(title: string, description: string): "gold" | "dollar" |
   return "economy";
 }
 
+async function fetchWithRetry(
+  url: string,
+  options: RequestInit = {},
+  retries = 2,
+  backoffMs = 1000
+): Promise<Response> {
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      const res = await fetch(url, options);
+      if (res.status === 429 && attempt < retries) {
+        const retryAfter = res.headers.get("Retry-After");
+        const waitMs = retryAfter ? parseInt(retryAfter) * 1000 : backoffMs * Math.pow(2, attempt);
+        await new Promise((r) => setTimeout(r, waitMs));
+        continue;
+      }
+      return res;
+    } catch (err) {
+      if (attempt === retries) throw err;
+      await new Promise((r) => setTimeout(r, backoffMs * Math.pow(2, attempt)));
+    }
+  }
+  throw new Error("Max retries exceeded");
+}
+
 export async function fetchNewsFromAPI(): Promise<NewsArticle[]> {
   const apiKey = process.env.NEWS_DATA_API_KEY;
 
@@ -51,7 +75,7 @@ export async function fetchNewsFromAPI(): Promise<NewsArticle[]> {
     const seen = new Set<string>();
 
     for (const q of queries) {
-      const res = await fetch(
+      const res = await fetchWithRetry(
         `https://newsdata.io/api/1/news?apikey=${apiKey}&q=${encodeURIComponent(q)}&language=ar&country=eg&category=business&size=10`,
         { next: { revalidate: 300, tags: ["news"] } }
       );

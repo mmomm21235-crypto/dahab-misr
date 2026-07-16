@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import Link from "next/link";
 import { Clock, ChevronLeft, Newspaper, TrendingUp, DollarSign, Globe, RefreshCw, Search, X } from "lucide-react";
 import { MOCK_NEWS } from "@/lib/goldData";
 import { cn, CATEGORY_COLORS, CATEGORY_LABELS, formatTimeAgo } from "@/lib/utils";
+import { NativeAdSlot } from "@/components/ads/NativeAdSlot";
 import type { NewsArticle } from "@/types";
 
 const CATEGORIES = [
@@ -174,13 +175,17 @@ export function NewsContent() {
       {!isLoading && (
         <div className="space-y-3">
           {filtered.map((article, i) => (
-            <div
-              key={article.id}
-              className="animate-fade-in"
-              style={{ animationDelay: `${i * 60}ms` }}
-            >
-              <NewsCard article={article} />
-            </div>
+            <Fragment key={article.id}>
+              <div
+                className="animate-fade-in"
+                style={{ animationDelay: `${i * 60}ms` }}
+              >
+                <NewsCard article={article} />
+              </div>
+              {(i + 1) % 3 === 0 && i < filtered.length - 1 && (
+                <NativeAdSlot className="animate-fade-in" />
+              )}
+            </Fragment>
           ))}
         </div>
       )}

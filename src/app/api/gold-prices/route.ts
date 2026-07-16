@@ -59,7 +59,7 @@ export const GET = withSecurity(async () => {
       {
         headers: {
           "Cache-Control": "public, s-maxage=60, stale-while-revalidate=120",
-          "Access-Control-Allow-Origin": "https://dahab-misr.vercel.app",
+          "Access-Control-Allow-Origin": "*",
           "X-Cache-Source": source,
         },
       }

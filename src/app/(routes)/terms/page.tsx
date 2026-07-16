@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "شروط الاستخدام",
   description: "شروط وأحكام استخدام تطبيق ذهب مصر",
+  alternates: { canonical: "/terms" },
 };
 
 export default function TermsPage() {

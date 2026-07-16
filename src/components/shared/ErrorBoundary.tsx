@@ -1,45 +1,49 @@
 "use client";
 
-import { Component, type ReactNode } from "react";
-import { AlertTriangle, RefreshCw } from "lucide-react";
+import React from "react";
 
-interface Props {
-  children: ReactNode;
-  fallback?: ReactNode;
+interface ErrorBoundaryProps {
+  children: React.ReactNode;
+  fallback?: React.ReactNode;
 }
 
-interface State {
+interface ErrorBoundaryState {
   hasError: boolean;
   error: Error | null;
 }
 
-export class ErrorBoundary extends Component<Props, State> {
-  state: State = { hasError: false, error: null };
+export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
 
-  static getDerivedStateFromError(error: Error): State {
+  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
     return { hasError: true, error };
+  }
+
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    console.error("ErrorBoundary caught:", error, errorInfo);
   }
 
   render() {
     if (this.state.hasError) {
       if (this.props.fallback) return this.props.fallback;
       return (
-        <div className="flex flex-col items-center justify-center min-h-[30vh] p-6 text-center">
-          <div className="w-16 h-16 rounded-2xl bg-red-500/10 flex items-center justify-center mb-4">
-            <AlertTriangle className="w-8 h-8 text-red-500" />
-          </div>
-          <h2 className="font-bold text-lg mb-2">حدث خطأ</h2>
-          <p className="text-sm text-muted-foreground mb-4 max-w-sm">
-            {this.state.error?.message || "حدث خطأ غير متوقع"}
+        <div className="flex flex-col items-center justify-center py-16 px-4">
+          <p className="text-lg font-semibold text-foreground mb-2">
+            حدث خطأ غير متوقع
+          </p>
+          <p className="text-sm text-muted-foreground mb-4 text-center">
+            يرجى إعادة تحميل الصفحة أو المحاولة لاحقاً
           </p>
           <button
             onClick={() => {
               this.setState({ hasError: false, error: null });
               window.location.reload();
             }}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gold-gradient text-white font-bold text-sm shadow-lg shadow-gold-500/30 hover:shadow-gold-500/50 transition-all"
+            className="rounded-xl bg-primary px-6 py-2 text-sm font-semibold text-primary-foreground"
           >
-            <RefreshCw className="w-4 h-4" />
             إعادة المحاولة
           </button>
         </div>

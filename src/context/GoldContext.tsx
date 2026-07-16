@@ -34,10 +34,16 @@ export function GoldProvider({ children }: { children: React.ReactNode }) {
 
   const refresh = useCallback(() => fetchPrices(true), [fetchPrices]);
 
-  const value = useMemo(
-    () => ({ prices, isLoading, isRefreshing, error, refresh, lastUpdated }),
-    [prices, isLoading, isRefreshing, error, refresh, lastUpdated]
-  );
+  const value = useMemo(() => {
+    return {
+      prices,
+      isLoading,
+      isRefreshing,
+      error,
+      refresh,
+      lastUpdated: lastUpdated ? new Date(lastUpdated) : null,
+    };
+  }, [prices, isLoading, isRefreshing, error, refresh, lastUpdated]);
 
   return (
     <GoldContext.Provider value={value}>

@@ -127,6 +127,36 @@ export default function RootLayout({
         "query-input": "required name=search_term_string",
       },
     },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: [
+        {
+          "@type": "Question",
+          name: "كم سعر عيار 21 اليوم في مصر؟",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "يتغير سعر عيار 21 يومياً. تابع أسعار الذهب لحظة بلحظة عبر تطبيق ذهب مصر.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "كيف أسعر ذهبي؟",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "استخدم حاسبة الذهب في تطبيق ذهبمصر لإدخال الوزن والعيار والحصول على السعر.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "هل الأسعار المعروضة هي سعر البيع الفعلي؟",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "لا، الأسعار للاسترشاد فقط ولا تمثل عروض بيع أو شراء فعلية. تأكد من السعر من المحل قبل الشراء.",
+          },
+        },
+      ],
+    },
   ];
 
   return (

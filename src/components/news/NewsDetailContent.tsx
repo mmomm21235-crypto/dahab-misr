@@ -1,9 +1,12 @@
 "use client";
 
+import { Fragment } from "react";
 import Link from "next/link";
 import { ArrowRight, Clock, Share2, TrendingUp, DollarSign, Newspaper } from "lucide-react";
 import type { NewsArticle } from "@/types";
 import { cn, formatDate, CATEGORY_COLORS, CATEGORY_LABELS } from "@/lib/utils";
+import { NativeAdSlot } from "@/components/ads/NativeAdSlot";
+import { BannerAd } from "@/components/ads/BannerAd";
 import { toast } from "sonner";
 
 interface Props {
@@ -87,15 +90,21 @@ export function NewsDetailContent({ article }: Props) {
 
         {/* Content */}
         <div className="prose prose-sm max-w-none">
-          {article.content.split("\n\n").map((paragraph, i) => (
-            <p
-              key={i}
-              className="text-sm leading-loose text-foreground/90 mb-4 last:mb-0"
-            >
-              {paragraph}
-            </p>
+          {article.content.split("\n\n").map((paragraph, i, arr) => (
+            <Fragment key={i}>
+              <p
+                className="text-sm leading-loose text-foreground/90 mb-4 last:mb-0"
+              >
+                {paragraph}
+              </p>
+              {(i + 1) % 3 === 0 && i < arr.length - 1 && (
+                <NativeAdSlot className="my-4" />
+              )}
+            </Fragment>
           ))}
         </div>
+
+        <BannerAd className="mt-4" />
 
         {/* Source */}
         <div className="pt-3 border-t border-border/50 flex items-center justify-between">

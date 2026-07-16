@@ -9,6 +9,8 @@ import { MiniChart } from "./MiniChart";
 import { HomeStats } from "./HomeStats";
 import { NewsPreview } from "./NewsPreview";
 import { ShareModal } from "@/components/shared/ShareModal";
+import { BannerAd } from "@/components/ads/BannerAd";
+import { NativeAdSlot } from "@/components/ads/NativeAdSlot";
 import Link from "next/link";
 import { Calculator, TrendingUp, ChevronLeft, Share2 } from "lucide-react";
 
@@ -91,6 +93,8 @@ export function HomeContent() {
         <HomeStats />
       </div>
 
+      <BannerAd className="animate-fade-in" />
+
       <div className="animate-fade-in stagger-5">
         <div className="flex items-center justify-between mb-3 px-1">
           <h2 className="text-sm font-bold text-muted-foreground">حركة الأسعار اليوم</h2>
@@ -100,6 +104,8 @@ export function HomeContent() {
         </div>
         <MiniChart />
       </div>
+
+      <NativeAdSlot className="animate-fade-in" />
 
       <div className="gold-card p-5 animate-fade-in stagger-6">
         <div className="flex items-center justify-between mb-3">

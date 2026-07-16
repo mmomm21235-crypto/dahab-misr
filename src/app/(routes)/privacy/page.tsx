@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "سياسة الخصوصية",
   description: "سياسة الخصوصية لتطبيق ذهب مصر - كيفية جمع وحماية بياناتك",
+  alternates: { canonical: "/privacy" },
 };
 
 export default function PrivacyPage() {
