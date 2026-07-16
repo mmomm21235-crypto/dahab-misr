@@ -12,6 +12,7 @@ import {
   Store,
   Megaphone,
   Wallet,
+  Download,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/shared/ThemeToggle";
@@ -26,6 +27,7 @@ const NAV_ITEMS = [
   { href: "/alerts", label: "التنبيهات", Icon: Bell },
   { href: "/portfolio", label: "محفظتي", Icon: Wallet },
   { href: "/shops", label: "دليل المحلات", Icon: Store },
+  { href: "/download", label: "تحميل التطبيق", Icon: Download },
   { href: "/settings", label: "الإعدادات", Icon: Settings },
 ];
 

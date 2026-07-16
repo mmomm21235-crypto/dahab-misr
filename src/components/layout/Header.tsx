@@ -17,6 +17,7 @@ const PAGE_TITLES: Record<string, string> = {
   "/alerts/history": "سجل التنبيهات",
   "/portfolio": "محفظتي",
   "/shops": "دليل المحلات",
+  "/download": "تحميل التطبيق",
   "/advertise": "إعلن هنا",
   "/settings": "الإعدادات",
   "/about": "عن التطبيق",
