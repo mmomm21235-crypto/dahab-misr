@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 
 const APK_DOWNLOAD_URL =
-  "https://github.com/mmomm21235-crypto/dahab-misr/releases/latest/download/dahab-misr-v2.0.0.apk";
+  "https://github.com/mmomm21235-crypto/dahab-misr/releases/latest/download/app-debug.apk";
 const RELEASES_URL =
   "https://github.com/mmomm21235-crypto/dahab-misr/releases";
 
