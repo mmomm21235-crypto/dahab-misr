@@ -6,6 +6,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - name: Setup Node.js
@@ -35,3 +37,19 @@ jobs:
         with:
           name: dahab-misr.apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
+      - name: Get version
+        id: version
+        run: echo "version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.version.outputs.version }}
+          name: ط°ظ‡ط¨ ظ…طµط± v${{ steps.version.outputs.version }}
+          body: |
+            ## ط°ظ‡ط¨ ظ…طµط± - طھط·ط¨ظٹظ‚ ط£ط³ط¹ط§ط± ط§ظ„ط°ظ‡ط¨ ظپظٹ ظ…طµط±
+            ### ط§ظ„طھط­ظ…ظٹظ„
+            ط­ظ…ظ‘ظ„ ظ…ظ„ظپ APK ظˆط«ط¨ظ‘طھظ‡ ط¹ظ„ظ‰ ط¬ظ‡ط§ط² Android.
+          files: android/app/build/outputs/apk/debug/app-debug.apk
+          draft: false
+          prerelease: false
+          generate_release_notes: true
