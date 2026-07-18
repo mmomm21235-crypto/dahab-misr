@@ -21,7 +21,7 @@
     "docker:up": "docker compose up -d",
     "docker:down": "docker compose down",
     "setup": "npm install && prisma generate && prisma db push && prisma db seed",
-    "vercel:build": "node -e \"require('fs').copyFileSync('prisma/schema.postgres.prisma','prisma/schema.prisma')\" && prisma generate && prisma db push --skip-generate && next build",
+    "vercel:build": "node -e \"require('fs').copyFileSync('prisma/schema.postgres.prisma','prisma/schema.prisma')\" && prisma generate && next build",
     "db:postgres": "prisma db push --schema=prisma/schema.postgres.prisma",
     "android:init": "npx cap add android",
     "android:sync": "npx cap sync android",
