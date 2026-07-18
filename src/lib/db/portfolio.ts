@@ -2,7 +2,6 @@ import { prisma } from "./prisma";
 
 export interface PortfolioHolding {
   id: string;
-  userId: string;
   name: string;
   karat: number;
   weight: number;
@@ -15,11 +14,19 @@ export async function getPortfolioHoldings(userId: string): Promise<PortfolioHol
   const holdings = await prisma.portfolioHolding.findMany({
     where: { userId },
     orderBy: { buyDate: "desc" },
+    select: {
+      id: true,
+      name: true,
+      karat: true,
+      weight: true,
+      buyPrice: true,
+      buyDate: true,
+      notes: true,
+    },
   });
 
   return holdings.map((h) => ({
     id: h.id,
-    userId: h.userId,
     name: h.name,
     karat: h.karat,
     weight: h.weight,
@@ -43,11 +50,19 @@ export async function createPortfolioHolding(
       buyDate: data.buyDate ? new Date(data.buyDate) : new Date(),
       notes: data.notes ?? null,
     },
+    select: {
+      id: true,
+      name: true,
+      karat: true,
+      weight: true,
+      buyPrice: true,
+      buyDate: true,
+      notes: true,
+    },
   });
 
   return {
     id: holding.id,
-    userId: holding.userId,
     name: holding.name,
     karat: holding.karat,
     weight: holding.weight,
@@ -75,11 +90,19 @@ export async function updatePortfolioHolding(
       ...(data.buyDate !== undefined && { buyDate: new Date(data.buyDate) }),
       ...(data.notes !== undefined && { notes: data.notes }),
     },
+    select: {
+      id: true,
+      name: true,
+      karat: true,
+      weight: true,
+      buyPrice: true,
+      buyDate: true,
+      notes: true,
+    },
   });
 
   return {
     id: holding.id,
-    userId: holding.userId,
     name: holding.name,
     karat: holding.karat,
     weight: holding.weight,
