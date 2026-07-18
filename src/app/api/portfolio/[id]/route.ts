@@ -38,7 +38,6 @@ export const PUT = withSecurity(async (request: Request, { params }: Props) => {
 
     return NextResponse.json({ success: true, data: holding });
   } catch (error) {
-    console.error("Portfolio PUT error:", error);
     return NextResponse.json({ success: false, error: "Failed to update" }, { status: 500 });
   }
 }, { rateLimit: "portfolio", requireAuth: true });
@@ -60,7 +59,6 @@ export const DELETE = withSecurity(async (_request: Request, { params }: Props) 
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Portfolio DELETE error:", error);
     return NextResponse.json({ success: false, error: "Failed to delete" }, { status: 500 });
   }
 }, { rateLimit: "portfolio", requireAuth: true });

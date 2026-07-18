@@ -11,11 +11,10 @@ export const GET = withSecurity(async () => {
     const apiNews = await fetchNewsFromAPI();
     if (apiNews.length > 0) {
       return NextResponse.json(
-        { success: true, data: apiNews, source: "NewsData.io" },
+        { success: true, data: apiNews },
         {
           headers: {
             "Cache-Control": "public, s-maxage=300, stale-while-revalidate=600",
-            "X-Cache-Source": "api",
           },
         }
       );
@@ -23,16 +22,14 @@ export const GET = withSecurity(async () => {
 
     const dbNews = await getNews();
     return NextResponse.json(
-      { success: true, data: dbNews, source: "database" },
+      { success: true, data: dbNews },
       {
         headers: {
           "Cache-Control": "public, s-maxage=600, stale-while-revalidate=1200",
-          "X-Cache-Source": "database",
         },
       }
     );
   } catch (error) {
-    console.error("News API error:", error);
     return NextResponse.json(
       { success: false, error: "Failed to fetch news" },
       { status: 500 }

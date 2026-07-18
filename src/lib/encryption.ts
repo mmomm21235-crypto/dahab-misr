@@ -8,9 +8,8 @@ function getKey(): Buffer {
     if (process.env.NODE_ENV === "production") {
       throw new Error("ENCRYPTION_KEY environment variable is required in production");
     }
-    return crypto.scryptSync("dahab-misr-dev-key-not-for-prod", "salt-dahab-misr", 32);
+    return crypto.randomBytes(32);
   }
-  // Use a per-environment salt to prevent cross-environment attacks
   const salt = `dahab-misr-${process.env.NODE_ENV || "development"}`;
   return crypto.scryptSync(envKey, salt, 32);
 }

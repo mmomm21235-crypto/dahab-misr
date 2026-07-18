@@ -17,7 +17,6 @@ export const GET = withSecurity(async () => {
     const history = await getAlertHistory(userId, 50);
     return NextResponse.json({ success: true, data: history });
   } catch (error) {
-    console.error("GET alert history error:", error);
     return NextResponse.json(
       { success: false, error: "Internal server error" },
       { status: 500 }
@@ -56,7 +55,6 @@ export const POST = withSecurity(async (req) => {
 
     return NextResponse.json({ success: true, data: entry }, { status: 201 });
   } catch (error) {
-    console.error("POST alert history error:", error);
     return NextResponse.json(
       { success: false, error: "Failed to log alert" },
       { status: 500 }

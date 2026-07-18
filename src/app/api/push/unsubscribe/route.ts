@@ -18,7 +18,6 @@ export const POST = withSecurity(async () => {
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Unsubscribe error:", error);
     if ((error as any)?.code === "P2025") {
       return NextResponse.json({ success: true });
     }

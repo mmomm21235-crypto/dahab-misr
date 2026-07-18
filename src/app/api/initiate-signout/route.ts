@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
+import { withSecurity } from "@/lib/api-security";
 
-export async function POST() {
+export const POST = withSecurity(async () => {
   const base = process.env.NEXTAUTH_URL || "https://dahab-misr.vercel.app";
   const response = NextResponse.redirect(new URL("/", base), { status: 303 });
 
@@ -11,7 +12,7 @@ export async function POST() {
   // Clear all NextAuth cookies
   const cookies = [
     `${cookieBase}session-token`,
-    "next-auth.csrf-token",
+    `${cookieBase}csrf-token`,
     `${cookieBase}callback-url`,
   ];
 
@@ -27,4 +28,4 @@ export async function POST() {
   }
 
   return response;
-}
+}, { rateLimit: "auth" });

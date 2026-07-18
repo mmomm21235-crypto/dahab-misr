@@ -20,7 +20,7 @@ export const GET = withSecurity(async () => {
     const holdings = await getPortfolioHoldings(user.id);
     return NextResponse.json({ success: true, data: holdings });
   } catch (error) {
-    console.error("Portfolio GET error:", error);
+
     return NextResponse.json({ success: false, error: "Failed to fetch portfolio" }, { status: 500 });
   }
 }, { rateLimit: "portfolio", requireAuth: true });
@@ -65,7 +65,6 @@ export const POST = withSecurity(async (request) => {
 
     return NextResponse.json({ success: true, data: holding }, { status: 201 });
   } catch (error) {
-    console.error("Portfolio POST error:", error);
     return NextResponse.json({ success: false, error: "Failed to create holding" }, { status: 500 });
   }
 }, {

@@ -42,7 +42,7 @@ async function handleSignin() {
     // Validate redirect URL to prevent open redirect
     try {
       const url = new URL(redirectUrl);
-      if (!ALLOWED_HOSTS.includes(url.hostname) && !url.hostname.endsWith(".vercel.app")) {
+      if (!ALLOWED_HOSTS.includes(url.hostname)) {
         return NextResponse.redirect(new URL("/auth/signin?error=InvalidRedirect", base), { status: 303 });
       }
     } catch {
@@ -57,7 +57,6 @@ async function handleSignin() {
 
     return response;
   } catch (err) {
-    console.error("Initiate sign-in error:", err);
     return NextResponse.redirect(new URL("/auth/signin?error=ServerError", base), { status: 303 });
   }
 }

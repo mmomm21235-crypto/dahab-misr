@@ -24,7 +24,6 @@ export const DELETE = withSecurity(
       if (error instanceof Error && error.message === "UNAUTHORIZED") {
         return NextResponse.json({ success: false, error: "غير مصرح" }, { status: 403 });
       }
-      console.error("DELETE /api/shops/[id] error:", error);
       return NextResponse.json({ success: false, error: "Failed to delete shop" }, { status: 500 });
     }
   },

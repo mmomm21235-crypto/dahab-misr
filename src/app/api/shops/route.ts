@@ -9,10 +9,17 @@ export const GET = withSecurity(async () => {
       where: { isActive: true },
       orderBy: { createdAt: "desc" },
       take: 100,
+      select: {
+        id: true,
+        name: true,
+        phone: true,
+        whatsapp: true,
+        address: true,
+        location: true,
+      },
     });
     return NextResponse.json(shops);
   } catch (error) {
-    console.error("GET /api/shops error:", error);
     return NextResponse.json({ success: false, error: "Failed to fetch shops" }, { status: 500 });
   }
 }, { rateLimit: "shops" });
@@ -56,7 +63,6 @@ export const POST = withSecurity(async (req) => {
     if (error instanceof Error && error.message === "UNAUTHORIZED") {
       return NextResponse.json({ success: false, error: "غير مصرح" }, { status: 403 });
     }
-    console.error("POST /api/shops error:", error);
     return NextResponse.json({ success: false, error: "Failed to create shop" }, { status: 500 });
   }
 }, { rateLimit: "shops" });

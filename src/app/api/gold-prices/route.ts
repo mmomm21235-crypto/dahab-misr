@@ -45,13 +45,11 @@ export const GET = withSecurity(async () => {
         });
       }
     } catch (dbErr) {
-      console.warn("Failed to save price history:", dbErr);
     }
 
     try {
       await checkAlertsAndNotify(prices);
     } catch (alertErr) {
-      console.warn("Alert check failed:", alertErr);
     }
 
     return NextResponse.json(
@@ -59,13 +57,10 @@ export const GET = withSecurity(async () => {
       {
         headers: {
           "Cache-Control": "public, s-maxage=60, stale-while-revalidate=120",
-          "Access-Control-Allow-Origin": "*",
-          "X-Cache-Source": source,
         },
       }
     );
   } catch (error) {
-    console.error("Gold prices API error:", error);
     const prices = generateCurrentPrices();
     return NextResponse.json(
       { success: true, data: prices },

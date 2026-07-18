@@ -6,7 +6,6 @@ import { useSession } from "next-auth/react";
 
 const WHATSAPP_NUMBER = "201159130500";
 const WHATSAPP_MESSAGE = encodeURIComponent("مرحباً، أريد إضافة محلي في دليل محلات ذهب مصر");
-const ADMIN_EMAIL = process.env.NEXT_PUBLIC_ADMIN_EMAIL || "mmomm21235@gmail.com";
 
 interface Shop {
   id: string;
@@ -27,7 +26,7 @@ export function ShopsContent() {
   const [saving, setSaving] = useState(false);
   const [saveMsg, setSaveMsg] = useState("");
 
-  const isAdmin = session?.user?.email === ADMIN_EMAIL;
+  const isAdmin = !!(session?.user as any)?.isAdmin;
 
   const fetchShops = () => {
     fetch("/api/shops")

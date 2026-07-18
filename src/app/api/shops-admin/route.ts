@@ -16,7 +16,6 @@ export const GET = withSecurity(async () => {
     if (error instanceof Error && error.message === "UNAUTHORIZED") {
       return NextResponse.json({ success: false, error: "غير مصرح" }, { status: 403 });
     }
-    console.error("GET /api/shops-admin error:", error);
     return NextResponse.json({ success: false, error: "Failed to fetch shops" }, { status: 500 });
   }
 }, { rateLimit: "shops", requireAuth: true, requireAdmin: true });

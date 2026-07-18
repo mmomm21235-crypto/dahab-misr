@@ -16,7 +16,6 @@ export const GET = withSecurity(async () => {
     const alerts = await getUserAlerts(userId);
     return NextResponse.json({ success: true, data: alerts });
   } catch (error) {
-    console.error("GET alerts error:", error);
     return NextResponse.json({ success: false, error: "Internal server error" }, { status: 500 });
   }
 }, { rateLimit: "api" });
@@ -35,7 +34,6 @@ export const POST = withSecurity(async (req) => {
     const alert = await createAlert(userId, body);
     return NextResponse.json({ success: true, data: alert }, { status: 201 });
   } catch (error) {
-    console.error("POST alert error:", error);
     return NextResponse.json({ success: false, error: "Failed to create alert" }, { status: 500 });
   }
 }, { rateLimit: "api" });
@@ -54,7 +52,6 @@ export const DELETE = withSecurity(async (req) => {
     await deleteAlert(id, userId);
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("DELETE alert error:", error);
     return NextResponse.json({ success: false, error: "Failed to delete alert" }, { status: 500 });
   }
 }, { rateLimit: "api" });

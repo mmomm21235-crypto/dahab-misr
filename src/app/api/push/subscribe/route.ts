@@ -29,7 +29,6 @@ export const POST = withSecurity(async (req) => {
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Subscribe error:", error);
     return NextResponse.json({ success: false, error: "Internal error" }, { status: 500 });
   }
 }, { rateLimit: "push", requireAuth: true });
