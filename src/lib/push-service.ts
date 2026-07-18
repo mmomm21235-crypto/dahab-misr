@@ -46,7 +46,7 @@ export async function sendPushNotification(
     if (err.statusCode === 410 || err.statusCode === 404) {
       return { success: false, error: "subscription_expired", statusCode: err.statusCode };
     }
-    return { success: false, error: err.message, statusCode: err.statusCode };
+    return { success: false, error: "send_failed", statusCode: err.statusCode };
   }
 }
 

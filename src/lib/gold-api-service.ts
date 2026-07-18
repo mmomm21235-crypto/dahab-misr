@@ -19,7 +19,6 @@ export async function fetchGoldPricesFromAPI(): Promise<GoldPrices | null> {
   const apiKey = process.env.GOLD_API_KEY;
 
   if (!apiKey) {
-    console.warn("GOLD_API_KEY not configured, using mock data");
     return null;
   }
 
@@ -36,7 +35,6 @@ export async function fetchGoldPricesFromAPI(): Promise<GoldPrices | null> {
     ]);
 
     if (!goldRes.ok) {
-      console.error(`GoldAPI responded with ${goldRes.status}`);
       return null;
     }
 
@@ -76,7 +74,6 @@ export async function fetchGoldPricesFromAPI(): Promise<GoldPrices | null> {
       source: "GoldAPI.io",
     };
   } catch (err) {
-    console.error("GoldAPI fetch failed:", err);
     return null;
   }
 }

@@ -58,7 +58,17 @@ export const POST = withSecurity(async (req) => {
         location: location || null,
       },
     });
-    return NextResponse.json({ success: true, data: shop });
+    return NextResponse.json({
+      success: true,
+      data: {
+        id: shop.id,
+        name: shop.name,
+        phone: shop.phone,
+        whatsapp: shop.whatsapp,
+        address: shop.address,
+        location: shop.location,
+      },
+    });
   } catch (error) {
     if (error instanceof Error && error.message === "UNAUTHORIZED") {
       return NextResponse.json({ success: false, error: "غير مصرح" }, { status: 403 });

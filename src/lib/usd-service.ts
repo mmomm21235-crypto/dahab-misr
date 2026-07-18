@@ -13,7 +13,6 @@ export async function fetchUsdEgpRate(): Promise<number> {
     });
 
     if (!res.ok) {
-      console.warn(`Exchange rate API responded with ${res.status}`);
       return FALLBACK_RATE;
     }
 
@@ -21,13 +20,11 @@ export async function fetchUsdEgpRate(): Promise<number> {
     const rate = data.rates?.EGP;
 
     if (!rate || rate <= 0) {
-      console.warn("No EGP rate in response, using fallback");
       return FALLBACK_RATE;
     }
 
     return rate;
   } catch (err) {
-    console.warn("Failed to fetch exchange rate:", err);
     return FALLBACK_RATE;
   }
 }

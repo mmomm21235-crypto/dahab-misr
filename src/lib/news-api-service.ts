@@ -59,7 +59,6 @@ export async function fetchNewsFromAPI(): Promise<NewsArticle[]> {
   const apiKey = process.env.NEWS_DATA_API_KEY;
 
   if (!apiKey) {
-    console.warn("NEWS_DATA_API_KEY not configured (get free key at newsdata.io)");
     return [];
   }
 
@@ -81,7 +80,6 @@ export async function fetchNewsFromAPI(): Promise<NewsArticle[]> {
       );
 
       if (!res.ok) {
-        console.warn(`NewsData.io responded with ${res.status} for query: ${q}`);
         continue;
       }
 
@@ -110,7 +108,6 @@ export async function fetchNewsFromAPI(): Promise<NewsArticle[]> {
 
     return allArticles.slice(0, 20);
   } catch (err) {
-    console.error("NewsData.io fetch failed:", err);
     return [];
   }
 }

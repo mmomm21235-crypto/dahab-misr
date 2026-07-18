@@ -51,7 +51,7 @@ export const POST = withSecurity(async (req) => {
       });
       return NextResponse.json({ success: false, error: "subscription_expired" }, { status: 410 });
     }
-    return NextResponse.json({ success: false, error: result.error }, { status: 500 });
+    return NextResponse.json({ success: false, error: "Failed to send notification" }, { status: 500 });
   } catch (error) {
     return NextResponse.json({ success: false, error: "Internal error" }, { status: 500 });
   }

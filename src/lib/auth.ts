@@ -6,9 +6,7 @@ import { prisma } from "@/lib/db/prisma";
 const googleId = process.env.AUTH_GOOGLE_ID;
 const googleSecret = process.env.AUTH_GOOGLE_SECRET;
 
-if (!googleId || !googleSecret) {
-  console.warn("AUTH_GOOGLE_ID and/or AUTH_GOOGLE_SECRET are not set. Google sign-in will not work.");
-}
+
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),

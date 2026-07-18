@@ -16,7 +16,24 @@ export const GET = withSecurity(async () => {
         prisma.shop.count(),
         prisma.portfolioHolding.count(),
         prisma.newsArticle.count(),
-        prisma.goldPrice.findFirst({ orderBy: { createdAt: "desc" } }),
+        prisma.goldPrice.findFirst({
+          orderBy: { createdAt: "desc" },
+          select: {
+            karat24Buy: true,
+            karat24Sell: true,
+            karat21Buy: true,
+            karat21Sell: true,
+            karat18Buy: true,
+            karat18Sell: true,
+            poundBuy: true,
+            poundSell: true,
+            dollarPrice: true,
+            change24: true,
+            change21: true,
+            change18: true,
+            changePound: true,
+          },
+        }),
       ]);
 
     const recentAlerts = await prisma.alert.findMany({

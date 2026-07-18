@@ -10,6 +10,16 @@ export const GET = withSecurity(async () => {
     const shops = await prisma.shop.findMany({
       orderBy: { createdAt: "desc" },
       take: 200,
+      select: {
+        id: true,
+        name: true,
+        phone: true,
+        whatsapp: true,
+        address: true,
+        location: true,
+        isActive: true,
+        createdAt: true,
+      },
     });
     return NextResponse.json({ success: true, data: shops });
   } catch (error) {

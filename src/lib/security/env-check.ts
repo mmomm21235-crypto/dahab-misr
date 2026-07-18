@@ -1,14 +1,14 @@
 const REQUIRED_ENV_VARS = [
   "DATABASE_URL",
-  "NEXTAUTH_SECRET",
+  "AUTH_SECRET",
   "AUTH_GOOGLE_ID",
   "AUTH_GOOGLE_SECRET",
 ];
 
 const SENSITIVE_ENV_VARS = [
   "DATABASE_URL",
-  "NEXTAUTH_SECRET",
-  "GOLDAPI_KEY",
+  "AUTH_SECRET",
+  "GOLD_API_KEY",
   "NEWS_DATA_API_KEY",
   "ADMIN_EMAIL",
   "ENCRYPTION_KEY",
@@ -23,8 +23,8 @@ export function getSafeEnvInfo() {
   return {
     nodeEnv: process.env.NODE_ENV,
     hasDb: !!process.env.DATABASE_URL,
-    hasAuth: !!process.env.NEXTAUTH_SECRET,
-    hasGoldApi: !!process.env.GOLDAPI_KEY,
+    hasAuth: !!process.env.AUTH_SECRET,
+    hasGoldApi: !!process.env.GOLD_API_KEY,
     hasNewsApi: !!process.env.NEWS_DATA_API_KEY,
     hasGoogleAuth: !!process.env.AUTH_GOOGLE_ID,
     hasVapid: !!process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY,

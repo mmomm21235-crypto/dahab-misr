@@ -1,19 +1,22 @@
 version: "3.9"
 
+# IMPORTANT: Copy .env.example to .env and fill in your own values before running
+# NEVER use these default values in production
+
 services:
   db:
     image: postgres:16-alpine
     restart: always
     environment:
-      POSTGRES_USER: dahab_user
-      POSTGRES_PASSWORD: dahab_password
-      POSTGRES_DB: dahab_misr
+      POSTGRES_USER: ${POSTGRES_USER:-dahab_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: ${POSTGRES_DB:-dahab_misr}
     ports:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U dahab_user -d dahab_misr"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-dahab_user} -d ${POSTGRES_DB:-dahab_misr}"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -29,12 +32,10 @@ services:
       db:
         condition: service_healthy
     env_file:
-      - .env.production
+      - .env
     environment:
-      DATABASE_URL: postgresql://dahab_user:dahab_password@db:5432/dahab_misr
-      NEXTAUTH_SECRET: change-this-to-a-random-string
-      NEXTAUTH_URL: http://localhost:3000
-      NEXT_PUBLIC_APP_URL: http://localhost:3000
+      DATABASE_URL: postgresql://${POSTGRES_USER:-dahab_user}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-dahab_misr}
+      AUTH_SECRET: ${AUTH_SECRET:?Set AUTH_SECRET in .env}
 
   redis:
     image: redis:7-alpine
