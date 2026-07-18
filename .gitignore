@@ -47,4 +47,9 @@ next-env.d.ts
 /android/capacitor-*
 local.properties
 
+# Android Keystore (NEVER commit)
+*.jks
+*.keystore
+keystore.properties
+
 prisma/dev.db

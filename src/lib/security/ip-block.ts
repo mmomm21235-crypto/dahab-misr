@@ -26,6 +26,19 @@ export function trackSuspiciousActivity(ip: string): boolean {
   return false;
 }
 
+export function blockIP(ip: string, durationMs?: number): void {
+  blockedIPs.add(ip);
+  if (durationMs) {
+    setTimeout(() => blockedIPs.delete(ip), durationMs);
+  } else {
+    setTimeout(() => blockedIPs.delete(ip), BLOCK_DURATION);
+  }
+}
+
+export function unblockIP(ip: string): boolean {
+  return blockedIPs.delete(ip);
+}
+
 export function getSecurityStats() {
   return {
     blockedIPs: blockedIPs.size,

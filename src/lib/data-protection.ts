@@ -1,4 +1,10 @@
 import { encrypt, decrypt, maskPhone, maskEmail } from "./encryption";
+import {
+  encryptField,
+  decryptField,
+  isEncrypted,
+  ENCRYPTED_FIELDS,
+} from "./security/field-encryption";
 
 const ENCRYPT_FIELDS = ["phone", "whatsapp"];
 const MASK_FIELDS = ["email", "name"];
@@ -7,7 +13,10 @@ export function encryptSensitiveData(data: Record<string, any>): Record<string, 
   const result = { ...data };
   for (const field of ENCRYPT_FIELDS) {
     if (result[field] && typeof result[field] === "string") {
-      result[field] = encrypt(result[field]);
+      const value = result[field] as string;
+      if (!isEncrypted(value)) {
+        result[field] = encryptField(value, field);
+      }
     }
   }
   return result;
@@ -16,11 +25,21 @@ export function encryptSensitiveData(data: Record<string, any>): Record<string, 
 export function decryptSensitiveData(data: Record<string, any>): Record<string, any> {
   const result = { ...data };
   for (const field of ENCRYPT_FIELDS) {
-    if (result[field] && typeof result[field] === "string" && result[field].includes(":")) {
-      try {
-        result[field] = decrypt(result[field]);
-      } catch {
-        // Already decrypted or invalid
+    if (result[field] && typeof result[field] === "string") {
+      const value = result[field] as string;
+      if (isEncrypted(value)) {
+        try {
+          result[field] = decryptField(value);
+        } catch {
+          // Legacy format: try old decrypt
+          if (value.includes(":")) {
+            try {
+              result[field] = decrypt(value);
+            } catch {
+              // Leave as-is
+            }
+          }
+        }
       }
     }
   }
@@ -47,16 +66,34 @@ export interface AuditEntry {
   ip?: string;
 }
 
-const auditLog: AuditEntry[] = [];
-const MAX_AUDIT_LOG = 1000;
-
-export function logAudit(entry: Omit<AuditEntry, "timestamp">) {
-  auditLog.push({ ...entry, timestamp: new Date().toISOString() });
-  if (auditLog.length > MAX_AUDIT_LOG) {
-    auditLog.splice(0, auditLog.length - MAX_AUDIT_LOG);
+export async function logAudit(entry: Omit<AuditEntry, "timestamp">): Promise<void> {
+  try {
+    const { logAudit: persistentLog } = await import("./security/audit-trail");
+    await persistentLog({
+      action: entry.action as any,
+      entity: entry.entity,
+      entityId: entry.entityId,
+      userId: entry.userId,
+      ip: entry.ip,
+    });
+  } catch {
+    // Fallback: graceful degradation if audit trail unavailable
   }
 }
 
-export function getAuditLog(limit: number = 50): AuditEntry[] {
-  return auditLog.slice(-limit).reverse();
+export async function getAuditLog(limit: number = 50): Promise<AuditEntry[]> {
+  try {
+    const { getAuditTrail } = await import("./security/audit-trail");
+    const result = await getAuditTrail({ pageSize: limit });
+    return result.entries.map((e: any) => ({
+      action: e.action,
+      entity: e.entity,
+      entityId: e.entityId,
+      userId: e.userId,
+      timestamp: e.timestamp,
+      ip: e.ip,
+    }));
+  } catch {
+    return [];
+  }
 }
