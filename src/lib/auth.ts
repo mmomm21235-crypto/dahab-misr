@@ -6,8 +6,6 @@ import { prisma } from "@/lib/db/prisma";
 const googleId = process.env.AUTH_GOOGLE_ID;
 const googleSecret = process.env.AUTH_GOOGLE_SECRET;
 
-
-
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   secret: process.env.AUTH_SECRET,
@@ -43,4 +41,13 @@ export { handler as GET, handler as POST };
 
 export async function getSession() {
   return getServerSession(authOptions);
+}
+
+export function validateAuthConfig() {
+  if (!googleId || !googleSecret) {
+    throw new Error("AUTH_GOOGLE_ID and AUTH_GOOGLE_SECRET are required");
+  }
+  if (!process.env.AUTH_SECRET) {
+    throw new Error("AUTH_SECRET is required");
+  }
 }

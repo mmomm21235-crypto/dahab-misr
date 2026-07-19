@@ -37,7 +37,8 @@
 # ----------------------------
 # Node.js / Prisma / Native Bridge
 # ----------------------------
--keep class com.dahabmisr.app.** { *; }
+-keep class com.dahabmisr.app.MainActivity { *; }
+-keep class com.dahabmisr.app.SecurityConfig { *; }
 -keep class com.facebook.hermes.** { *; }
 -keep class com.facebook.jni.** { *; }
 -keep class com.facebook.soloader.** { *; }

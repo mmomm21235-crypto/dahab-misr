@@ -21,11 +21,10 @@ public class MainActivity extends BridgeActivity {
     private static final String TAG = "MainActivity";
 
     // Set to true to block the app on rooted devices
-    // Change this to false if you want to allow rooted devices
-    private static final boolean BLOCK_ON_ROOT = false;
+    private static final boolean BLOCK_ON_ROOT = true;
 
     // Set to true to block on emulator (useful for production)
-    private static final boolean BLOCK_ON_EMULATOR = false;
+    private static final boolean BLOCK_ON_EMULATOR = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

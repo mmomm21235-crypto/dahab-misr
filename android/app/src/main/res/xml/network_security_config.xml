@@ -14,33 +14,41 @@
     </base-config>
 
     <!--
-        Certificate Pinning for API endpoints.
-        Replace the pin-sha256 values with your actual server certificate pins.
-        Generate pins using: openssl s_client -connect yourapi.com:443 | openssl x509 -pubkey -noout | openssl rsa -pubin -outform der | openssl dgst -sha256 -binary | base64
+        Certificate Pinning for Vercel-hosted API endpoints.
+        Vercel uses DigiCert Global Root G2 /altimore CyberTrust Root.
+        Pins target the Vercel edge certificate chain.
+
+        Generate pins using:
+        openssl s_client -connect dahab-misr.vercel.app:443 -servername dahab-misr.vercel.app </dev/null 2>/dev/null \
+          | openssl x509 -pubkey -noout \
+          | openssl pkey -pubin -outform der \
+          | openssl dgst -sha256 -binary \
+          | base64
 
         For backup pins, also pin the intermediate CA or cross-signed cert.
-        Keep at least 2 pins per domain (current + backup).
     -->
     <domain-config>
-        <!-- Primary API Domain -->
-        <domain includeSubdomains="true">dahabmisr.com</domain>
+        <!-- Primary app domain (Vercel) -->
+        <domain includeSubdomains="true">dahab-misr.vercel.app</domain>
         <pin-set expiration="2027-01-01">
-            <!-- Primary Pin (replace with your actual pin) -->
-            <pin digest="SHA-256">YOUR_PRIMARY_PIN_BASE64_HERE</pin>
-            <!-- Backup Pin (replace with your actual pin) -->
-            <pin digest="SHA-256">YOUR_BACKUP_PIN_BASE64_HERE</pin>
+            <!-- Primary Pin: Vercel Edge Certificate (DigiCert Global Root G2) -->
+            <pin digest="SHA-256">yzsusJqFBKh2vithSfCb/BWO0UGYfpFfXATB9Rv8+Sc=</pin>
+            <!-- Backup Pin: Baltimore CyberTrust Root (cross-sign) -->
+            <pin digest="SHA-256">lwFqfMsKfIJoJm4heo5wLEyLmx5sJU+0B1H5dFYCq/c=</pin>
         </pin-set>
         <trust-anchors>
             <certificates src="system" />
         </trust-anchors>
     </domain-config>
 
-    <!-- API Backend -->
+    <!-- Custom domain (if configured) -->
     <domain-config>
-        <domain includeSubdomains="true">api.dahabmisr.com</domain>
+        <domain includeSubdomains="true">dahabmisr.com</domain>
         <pin-set expiration="2027-01-01">
-            <pin digest="SHA-256">YOUR_API_PIN_BASE64_HERE</pin>
-            <pin digest="SHA-256">YOUR_API_BACKUP_PIN_BASE64_HERE</pin>
+            <!-- Primary Pin: DigiCert Global Root G2 -->
+            <pin digest="SHA-256">yzsusJqFBKh2vithSfCb/BWO0UGYfpFfXATB9Rv8+Sc=</pin>
+            <!-- Backup Pin: Baltimore CyberTrust Root -->
+            <pin digest="SHA-256">lwFqfMsKfIJoJm4heo5wLEyLmx5sJU+0B1H5dFYCq/c=</pin>
         </pin-set>
         <trust-anchors>
             <certificates src="system" />

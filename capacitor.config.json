@@ -6,7 +6,7 @@
     "androidScheme": "https",
     "url": "https://dahab-misr.vercel.app",
     "cleartext": false,
-    "allowNavigation": ["dahab-misr.vercel.app", "*.vercel.app"]
+    "allowNavigation": ["dahab-misr.vercel.app"]
   },
   "android": {
     "allowMixedContent": false

@@ -111,6 +111,7 @@ public class SecurityConfig {
     // SHA-256 of your release signing certificate (set after first signing)
     // To get this: keytool -list -v -keystore your-release.jks -alias your-alias
     // or: apksigner verify --print-certs your-app.apk
+    // IMPORTANT: Replace this with your actual certificate hash before production release
     private static final String EXPECTED_CERT_SHA256 = "YOUR_CERT_SHA256_HASH_HERE";
 
     private final Context context;
@@ -304,11 +305,18 @@ public class SecurityConfig {
         try {
             String imei = getSystemProperty("gsm.sim.imei");
             if (imei == null || imei.isEmpty() || imei.equals("000000000000000")) {
-                // No IMEI can indicate emulator
-                return false; // Not definitive
+                // No IMEI can indicate emulator, but not definitive on all devices
+                return false;
+            }
+            // Check for known emulator IMEI patterns
+            if (imei.equals("000000000000001") || imei.equals("123456789012345")) {
+                logSecurityEvent("Emulator IMEI pattern detected");
+                return true;
             }
         } catch (Exception e) {
-            // Ignore
+            // Telephony API not available - common in emulators
+            logSecurityEvent("Telephony API unavailable - possible emulator");
+            return true;
         }
         return false;
     }
@@ -322,9 +330,9 @@ public class SecurityConfig {
      */
     public boolean isAPKTampered() {
         if (EXPECTED_CERT_SHA256.startsWith("YOUR_")) {
-            // Certificate hash not configured yet - skip check
-            Log.w(TAG, "Certificate hash not configured - skipping tamper check");
-            return false;
+            // Certificate hash not configured - treat as tampered in production
+            logSecurityEvent("Certificate hash not configured - treating as tampered");
+            return true;
         }
 
         try {

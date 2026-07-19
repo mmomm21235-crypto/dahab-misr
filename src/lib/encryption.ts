@@ -8,7 +8,7 @@ function getKey(): Buffer {
     if (process.env.NODE_ENV === "production") {
       throw new Error("ENCRYPTION_KEY environment variable is required in production");
     }
-    return crypto.randomBytes(32);
+    return crypto.scryptSync("dahab-misr-dev-fallback-key-do-not-use-in-production", "dahab-misr-salt", 32);
   }
   const salt = `dahab-misr-${process.env.NODE_ENV || "development"}`;
   return crypto.scryptSync(envKey, salt, 32);

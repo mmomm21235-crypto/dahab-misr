@@ -192,7 +192,8 @@ async function executeAction(
 
     case "auto_disable_account":
       if (incident.userId) {
-        console.error(`[INCIDENT] Account ${incident.userId} flagged for disable: ${incident.title}`);
+        // Log with masked user ID only
+        console.error(`[INCIDENT] Account flagged for disable: ${incident.title}`);
       }
       break;
 
@@ -201,13 +202,12 @@ async function executeAction(
       break;
 
     case "rate_limit":
-      console.warn(`[INCIDENT] Rate limit triggered for ${incident.ip}: ${incident.title}`);
+      console.warn(`[INCIDENT] Rate limit triggered: ${incident.title}`);
       break;
 
     case "log_only":
       console.log(`[INCIDENT] ${incident.severity.toUpperCase()}: ${incident.title}`, {
         id: incident.id,
-        ip: incident.ip,
         source: incident.source,
       });
       break;
@@ -231,7 +231,6 @@ async function sendNotifications(incident: Incident): Promise<void> {
           {
             id: incident.id,
             description: incident.description,
-            ip: incident.ip,
             source: incident.source,
             timestamp: new Date(incident.createdAt).toISOString(),
           }

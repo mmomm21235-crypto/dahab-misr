@@ -52,7 +52,6 @@ export function middleware(req: NextRequest) {
     res.headers.set("X-Frame-Options", "DENY");
     res.headers.set("Cache-Control", "no-store, no-cache, must-revalidate");
     res.headers.set("Pragma", "no-cache");
-    res.headers.set("X-Request-IP", ip);
     return res;
   }
 
