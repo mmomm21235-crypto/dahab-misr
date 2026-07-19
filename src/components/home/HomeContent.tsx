@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useGoldContext } from "@/context/GoldContext";
 import { PriceGrid } from "./PriceGrid";
 import { LastUpdateBadge } from "./LastUpdateBadge";
@@ -9,6 +9,7 @@ import { MiniChart } from "./MiniChart";
 import { HomeStats } from "./HomeStats";
 import { NewsPreview } from "./NewsPreview";
 import { ShareModal } from "@/components/shared/ShareModal";
+import { PullToRefresh } from "@/components/shared/PullToRefresh";
 import { BannerAd } from "@/components/ads/BannerAd";
 import { NativeAdSlot } from "@/components/ads/NativeAdSlot";
 import Link from "next/link";
@@ -16,8 +17,13 @@ import { Calculator, TrendingUp, ChevronLeft, Share2 } from "lucide-react";
 import { MarketHours } from "./MarketHours";
 
 export function HomeContent() {
-  const { prices, isLoading, error } = useGoldContext();
+  const { prices, isLoading, error, refresh } = useGoldContext();
   const [showShare, setShowShare] = useState(false);
+
+  const handleRefresh = useCallback(async () => {
+    refresh();
+    await new Promise((r) => setTimeout(r, 1000));
+  }, [refresh]);
 
   const shareText = prices
     ? `🔸 أسعار الذهب في مصر الآن:
@@ -29,6 +35,7 @@ export function HomeContent() {
     : "ذهب مصر - أسعار الذهب لحظة بلحظة";
 
   return (
+    <PullToRefresh onRefresh={handleRefresh}>
     <div className="space-y-6">
       <ShareModal
         isOpen={showShare}
@@ -119,5 +126,6 @@ export function HomeContent() {
         <NewsPreview />
       </div>
     </div>
+    </PullToRefresh>
   );
 }
