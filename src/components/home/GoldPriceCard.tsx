@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { TrendingUp, TrendingDown, Minus } from "lucide-react";
 import type { GoldPrice } from "@/types";
 import {
@@ -43,13 +43,24 @@ export const GoldPriceCard = React.memo(function GoldPriceCard({
   const isUp = price.change > 0;
   const isDown = price.change < 0;
 
+  const prevBuyRef = useRef(price.buyPrice);
+  const [flash, setFlash] = useState<"up" | "down" | null>(null);
+
+  useEffect(() => {
+    if (prevBuyRef.current !== price.buyPrice) {
+      const dir = price.buyPrice > prevBuyRef.current ? "up" : "down";
+      setFlash(dir);
+      prevBuyRef.current = price.buyPrice;
+      const t = setTimeout(() => setFlash(null), 1500);
+      return () => clearTimeout(t);
+    }
+  }, [price.buyPrice]);
+
   const TrendIcon = isUp ? TrendingUp : isDown ? TrendingDown : Minus;
 
   return (
     <motion.div
-      role="button"
-      tabIndex={0}
-      aria-label={`${getKaratLabel(price.karat)} - سعر الشراء ${formatPrice(price.buyPrice)} ج.م`}
+      aria-label={`${getKaratLabel(price.karat)} - شراء ${formatPrice(price.buyPrice)} ج.م - بيع ${formatPrice(price.sellPrice)} ج.م`}
       initial={{ opacity: 0, y: 30, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{
@@ -63,8 +74,10 @@ export const GoldPriceCard = React.memo(function GoldPriceCard({
         transition: { duration: 0.2 },
       }}
       className={cn(
-        "gold-card p-5 cursor-pointer",
+        "gold-card p-5 cursor-pointer transition-colors duration-500",
         `bg-gradient-to-br ${colorClass}`,
+        flash === "up" && "ring-2 ring-green-500/60 bg-green-500/5",
+        flash === "down" && "ring-2 ring-red-500/60 bg-red-500/5",
         isHighlighted &&
           "ring-2 ring-gold-500/40 shadow-lg shadow-gold-500/10 animate-pulse-glow"
       )}
@@ -111,7 +124,6 @@ export const GoldPriceCard = React.memo(function GoldPriceCard({
       <div className="space-y-1">
         <motion.div
           className="flex items-baseline gap-1.5"
-          key={price.buyPrice}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.3 }}
@@ -142,7 +154,6 @@ export const GoldPriceCard = React.memo(function GoldPriceCard({
           <p className="text-[11px] text-muted-foreground">شراء</p>
           <motion.p
             className="text-sm font-bold text-green-600 dark:text-green-400"
-            key={`buy-${price.buyPrice}`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
           >
@@ -154,7 +165,6 @@ export const GoldPriceCard = React.memo(function GoldPriceCard({
           <p className="text-[11px] text-muted-foreground">بيع</p>
           <motion.p
             className="text-sm font-bold text-red-500 dark:text-red-400"
-            key={`sell-${price.sellPrice}`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
           >

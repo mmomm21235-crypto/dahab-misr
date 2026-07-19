@@ -24,7 +24,7 @@ export function middleware(req: NextRequest) {
 
   // 2. Bot detection
   if (BOT_USER_AGENTS.test(ua)) {
-    if (pathname.startsWith("/api/") && !pathname.startsWith("/api/news")) {
+    if (pathname.startsWith("/api/") && !pathname.startsWith("/api/news") && !pathname.startsWith("/api/auth") && !pathname.startsWith("/api/initiate")) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
   }

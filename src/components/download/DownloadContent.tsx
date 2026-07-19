@@ -171,6 +171,21 @@ export function DownloadContent() {
           كيفية التثبيت من المتصفح
         </Link>
       </div>
+
+      {/* QR Code */}
+      <div className="gold-card p-5 text-center space-y-3">
+        <h3 className="font-bold text-sm">امسح الرمز للفتح على الموبايل</h3>
+        <div className="inline-block p-3 bg-white rounded-2xl">
+          <img
+            src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent("https://dahab-misr.vercel.app")}&bgcolor=ffffff&color=1a1a1a`}
+            alt="QR Code لتطبيق ذهب مصر"
+            width={200}
+            height={200}
+            className="rounded-lg"
+          />
+        </div>
+        <p className="text-xs text-muted-foreground">dahab-misr.vercel.app</p>
+      </div>
     </div>
   );
 }

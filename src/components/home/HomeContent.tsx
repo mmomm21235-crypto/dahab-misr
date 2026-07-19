@@ -13,6 +13,7 @@ import { BannerAd } from "@/components/ads/BannerAd";
 import { NativeAdSlot } from "@/components/ads/NativeAdSlot";
 import Link from "next/link";
 import { Calculator, TrendingUp, ChevronLeft, Share2 } from "lucide-react";
+import { MarketHours } from "./MarketHours";
 
 export function HomeContent() {
   const { prices, isLoading, error } = useGoldContext();
@@ -70,7 +71,10 @@ export function HomeContent() {
       </div>
 
       <div className="animate-fade-in stagger-1">
-        <LastUpdateBadge />
+        <div className="flex items-center justify-between">
+          <LastUpdateBadge />
+          <MarketHours />
+        </div>
       </div>
 
       {error && (
