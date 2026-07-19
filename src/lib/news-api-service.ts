@@ -73,15 +73,19 @@ export async function fetchNewsFromAPI(): Promise<NewsArticle[]> {
     const allArticles: NewsArticle[] = [];
     const seen = new Set<string>();
 
-    for (const q of queries) {
-      const res = await fetchWithRetry(
-        `https://newsdata.io/api/1/news?apikey=${apiKey}&q=${encodeURIComponent(q)}&language=ar&country=eg&category=business&size=10`,
-        { next: { revalidate: 300, tags: ["news"] } }
-      );
+    const results = await Promise.allSettled(
+      queries.map((q) =>
+        fetchWithRetry(
+          `https://newsdata.io/api/1/news?apikey=${apiKey}&q=${encodeURIComponent(q)}&language=ar&country=eg&category=business&size=10`,
+          { next: { revalidate: 300, tags: ["news"] } }
+        )
+      )
+    );
 
-      if (!res.ok) {
-        continue;
-      }
+    for (const result of results) {
+      if (result.status !== "fulfilled") continue;
+      const res = result.value;
+      if (!res.ok) continue;
 
       const data: NewsDataResponse = await res.json();
       if (data.status !== "success" || !data.results) continue;

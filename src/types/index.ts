@@ -70,6 +70,7 @@ export interface AppSettings {
   notifications: boolean;
   currency: string;
   alertSound?: boolean;
+  refreshInterval?: number;
 }
 
 // ===== Navigation Types =====

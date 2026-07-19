@@ -15,7 +15,7 @@ export default function PrivacyPage() {
         </div>
         <div>
           <h1 className="font-black text-lg">سياسة الخصوصية</h1>
-          <p className="text-xs text-muted-foreground">آخر تحديث: يوليو 2025</p>
+          <p className="text-xs text-muted-foreground">آخر تحديث: يوليو 2026</p>
         </div>
       </div>
 

@@ -4,6 +4,7 @@ import { DownloadContent } from "@/components/download/DownloadContent";
 export const metadata: Metadata = {
   title: "تحميل التطبيق",
   description: "حمّل تطبيق ذهب مصر لل_Android - أسعار الذهب لحظة بلحظة",
+  alternates: { canonical: "/download" },
 };
 
 export default function DownloadPage() {

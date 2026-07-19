@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useEffect, useMemo, useCallback } from "react";
 import type { GoldPrices } from "@/types";
 import { useGoldStore } from "@/stores/goldStore";
+import { useSettingsStore } from "@/stores/settingsStore";
 
 interface GoldContextValue {
   prices: GoldPrices | null;
@@ -25,12 +26,14 @@ const GoldContext = createContext<GoldContextValue>({
 export function GoldProvider({ children }: { children: React.ReactNode }) {
   const { prices, isLoading, isRefreshing, error, lastUpdated, fetchPrices } =
     useGoldStore();
+  const { settings } = useSettingsStore();
 
   useEffect(() => {
     fetchPrices(false);
-    const interval = setInterval(() => fetchPrices(true), 5 * 60 * 1000);
+    const intervalMs = (settings.refreshInterval ?? 60) * 1000;
+    const interval = setInterval(() => fetchPrices(true), intervalMs);
     return () => clearInterval(interval);
-  }, [fetchPrices]);
+  }, [fetchPrices, settings.refreshInterval]);
 
   const refresh = useCallback(() => fetchPrices(true), [fetchPrices]);
 

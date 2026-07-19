@@ -45,15 +45,17 @@ export const GET = withSecurity(async () => {
         });
       }
     } catch (dbErr) {
+      console.error("[GOLD-PRICES] DB write failed:", dbErr);
     }
 
     try {
       await checkAlertsAndNotify(prices);
     } catch (alertErr) {
+      console.error("[GOLD-PRICES] Alert check failed:", alertErr);
     }
 
     return NextResponse.json(
-      { success: true, data: prices },
+      { success: true, data: prices, source },
       {
         headers: {
           "Cache-Control": "public, s-maxage=60, stale-while-revalidate=120",
@@ -61,9 +63,10 @@ export const GET = withSecurity(async () => {
       }
     );
   } catch (error) {
+    console.error("[GOLD-PRICES] Critical error:", error);
     const prices = generateCurrentPrices();
     return NextResponse.json(
-      { success: true, data: prices },
+      { success: true, data: prices, source: "mock-fallback" },
       { status: 200 }
     );
   }

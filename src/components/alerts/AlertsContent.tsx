@@ -142,6 +142,7 @@ export function AlertsContent({ isAuthenticated = false }: { isAuthenticated?: b
   };
 
   const handleDelete = (id: string) => {
+    if (!window.confirm("هل أنت متأكد من حذف هذا التنبيه؟")) return;
     deleteAlert(id); setAlerts(getAlerts()); toast.success("تم حذف التنبيه");
   };
 

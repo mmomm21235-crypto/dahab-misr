@@ -71,7 +71,7 @@ export function SettingsContent() {
   const { theme, setTheme, resolvedTheme } = useTheme();
   const { settings, updateSettings } = useSettingsStore();
   const [notifications, setNotifications] = useState(true);
-  const [refreshInterval, setRefreshInterval] = useState(60);
+  const [refreshInterval, setRefreshInterval] = useState(settings.refreshInterval ?? 60);
   const handleShare = async () => {
     const shareData = {
       title: "ذهب مصر",
@@ -229,7 +229,11 @@ export function SettingsContent() {
           action={
             <select
               value={refreshInterval}
-              onChange={(e) => setRefreshInterval(Number(e.target.value))}
+              onChange={(e) => {
+                const val = Number(e.target.value);
+                setRefreshInterval(val);
+                updateSettings({ refreshInterval: val });
+              }}
               className="text-xs font-bold bg-muted border border-border rounded-lg px-2 py-1.5 focus:outline-none focus:border-gold-500"
             >
               {REFRESH_OPTIONS.map((opt) => (
