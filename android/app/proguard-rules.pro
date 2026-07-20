@@ -30,8 +30,10 @@
     public void handleOnStop();
     public void handleOnDestroy();
     public void load();
-    @com.getcapacitor.annotation.CapacitorPlugin { *; }
-    @com.getcapacitor.PluginMethod { *; }
+}
+-keepclassmembers class * {
+    @com.getcapacitor.annotation.CapacitorPlugin <methods>;
+    @com.getcapacitor.PluginMethod <methods>;
 }
 
 # ----------------------------
@@ -146,3 +148,4 @@
 # ----------------------------
 -keep class com.google.firebase.** { *; }
 -keep class com.google.android.gms.measurement.** { *; }
+-dontwarn com.google.firebase.ktx.**

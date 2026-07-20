@@ -35,7 +35,7 @@ public class MainActivity extends BridgeActivity {
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         // Re-check debugger attachment on resume (in case it was attached while paused)
         SecurityConfig securityConfig = new SecurityConfig(this);

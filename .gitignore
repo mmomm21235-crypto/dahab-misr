@@ -53,3 +53,7 @@ local.properties
 keystore.properties
 
 prisma/dev.db
+
+# CI / Node version (PAT lacks workflow scope)
+.github/workflows/ci.yml
+.nvmrc
