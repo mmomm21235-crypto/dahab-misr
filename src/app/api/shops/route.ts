@@ -22,7 +22,7 @@ export const GET = withSecurity(async () => {
   } catch (error) {
     return NextResponse.json({ success: false, error: "Failed to fetch shops" }, { status: 500 });
   }
-}, { rateLimit: "shops" });
+}, { rateLimit: "shops", firewall: false, ddos: false, honeypot: false });
 
 export const POST = withSecurity(async (req) => {
   try {

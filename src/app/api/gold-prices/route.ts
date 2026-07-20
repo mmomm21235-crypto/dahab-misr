@@ -70,4 +70,4 @@ export const GET = withSecurity(async () => {
       { status: 200 }
     );
   }
-}, { rateLimit: "goldPrices" });
+}, { rateLimit: "goldPrices", firewall: false, ddos: false, honeypot: false });

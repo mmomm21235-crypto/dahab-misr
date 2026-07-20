@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const BOT_USER_AGENTS = /bot|crawler|spider|scraper|curl|wget|python|gohttp|phantom|headless|puppeteer|playwright|selenium/i;
+const BOT_USER_AGENTS = /curl|wget|python|gohttp|phantom|headless|puppeteer|playwright|selenium/i;
 
 const HONEYPOT_PATHS = [
   "/wp-admin", "/wp-login.php", "/wp-content", "/wp-includes",

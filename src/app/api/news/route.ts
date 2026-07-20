@@ -35,4 +35,4 @@ export const GET = withSecurity(async () => {
       { status: 500 }
     );
   }
-}, { rateLimit: "news" });
+}, { rateLimit: "news", firewall: false, ddos: false, honeypot: false });

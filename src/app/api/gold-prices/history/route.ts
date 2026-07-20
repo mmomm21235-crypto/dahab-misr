@@ -76,4 +76,4 @@ export const GET = withSecurity(async (request: NextRequest) => {
     const data = generateHistoricalData(period as any);
     return NextResponse.json({ success: true, data, source: "mock-fallback" });
   }
-}, { rateLimit: "goldPrices" });
+}, { rateLimit: "goldPrices", firewall: false, ddos: false, honeypot: false });
