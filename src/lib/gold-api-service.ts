@@ -15,13 +15,18 @@ interface GoldApiPriceResponse {
 const TROY_OZ_TO_GRAM = 31.1035;
 
 export async function fetchGoldPricesFromAPI(): Promise<GoldPrices | null> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 10000);
+
   try {
     const [goldRes, usdRate] = await Promise.all([
       fetch("https://api.gold-api.com/price/XAU", {
-        next: { revalidate: 600 },
+        signal: controller.signal,
       }),
       fetchUsdEgpRate(),
     ]);
+
+    clearTimeout(timeout);
 
     if (!goldRes.ok) {
       return null;

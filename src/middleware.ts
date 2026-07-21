@@ -50,8 +50,6 @@ export function middleware(req: NextRequest) {
     const res = NextResponse.next();
     res.headers.set("X-Content-Type-Options", "nosniff");
     res.headers.set("X-Frame-Options", "DENY");
-    res.headers.set("Cache-Control", "no-store, no-cache, must-revalidate");
-    res.headers.set("Pragma", "no-cache");
     return res;
   }
 

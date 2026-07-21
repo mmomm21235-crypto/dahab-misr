@@ -1,4 +1,4 @@
-const FALLBACK_RATE = 50.85;
+const FALLBACK_RATE = 51.09;
 
 interface ExchangeRateResponse {
   rates: Record<string, number>;
@@ -7,10 +7,15 @@ interface ExchangeRateResponse {
 }
 
 export async function fetchUsdEgpRate(): Promise<number> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 8000);
+
   try {
     const res = await fetch("https://open.er-api.com/v6/latest/USD", {
-      next: { revalidate: 3600 },
+      signal: controller.signal,
     });
+
+    clearTimeout(timeout);
 
     if (!res.ok) {
       return FALLBACK_RATE;

@@ -66,8 +66,6 @@ const nextConfig: NextConfig = {
       {
         source: "/api/(.*)",
         headers: [
-          { key: "Cache-Control", value: "no-store, no-cache, must-revalidate" },
-          { key: "Pragma", value: "no-cache" },
           { key: "X-Robots-Tag", value: "noindex" },
         ],
       },
