@@ -30,7 +30,7 @@ export function GoldProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     fetchPrices(false);
-    const intervalMs = (settings.refreshInterval ?? 60) * 1000;
+    const intervalMs = (settings.refreshInterval ?? 600) * 1000;
     const interval = setInterval(() => fetchPrices(true), intervalMs);
     return () => clearInterval(interval);
   }, [fetchPrices, settings.refreshInterval]);

@@ -7,18 +7,41 @@ import { withSecurity } from "@/lib/api-security";
 
 export const dynamic = "force-dynamic";
 
+const CACHE_TTL_MS = 10 * 60 * 1000;
+let cachedPrices: ReturnType<typeof generateCurrentPrices> | null = null;
+let cachedSource = "";
+let lastFetchTime = 0;
+
 export const GET = withSecurity(async () => {
   try {
+    const now = Date.now();
+    const cacheAge = now - lastFetchTime;
+
+    if (cachedPrices && cacheAge < CACHE_TTL_MS) {
+      return NextResponse.json(
+        { success: true, data: cachedPrices, source: cachedSource + " (cached)" },
+        {
+          headers: {
+            "Cache-Control": "public, s-maxage=600, stale-while-revalidate=1200",
+          },
+        }
+      );
+    }
+
     let prices = await fetchGoldPricesFromAPI();
-    let source = "GoldAPI.io";
+    let source = "gold-api.com";
 
     if (!prices) {
       prices = generateCurrentPrices();
       source = "mock";
     }
 
+    cachedPrices = prices;
+    cachedSource = source;
+    lastFetchTime = now;
+
     try {
-      const fiveMinAgo = new Date(Date.now() - 5 * 60 * 1000);
+      const fiveMinAgo = new Date(now - 5 * 60 * 1000);
       const lastRecord = await prisma.goldPrice.findFirst({
         where: { createdAt: { gte: fiveMinAgo } },
         orderBy: { createdAt: "desc" },
@@ -58,12 +81,18 @@ export const GET = withSecurity(async () => {
       { success: true, data: prices, source },
       {
         headers: {
-          "Cache-Control": "public, s-maxage=60, stale-while-revalidate=120",
+          "Cache-Control": "public, s-maxage=600, stale-while-revalidate=1200",
         },
       }
     );
   } catch (error) {
     console.error("[GOLD-PRICES] Critical error:", error);
+    if (cachedPrices) {
+      return NextResponse.json(
+        { success: true, data: cachedPrices, source: cachedSource + " (fallback)" },
+        { status: 200 }
+      );
+    }
     const prices = generateCurrentPrices();
     return NextResponse.json(
       { success: true, data: prices, source: "mock-fallback" },

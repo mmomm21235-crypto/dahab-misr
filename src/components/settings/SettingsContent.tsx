@@ -33,9 +33,8 @@ const THEME_OPTIONS = [
 ];
 
 const REFRESH_OPTIONS = [
-  { value: 30, label: "٣٠ ثانية" },
-  { value: 60, label: "دقيقة" },
-  { value: 300, label: "٥ دقائق" },
+  { value: 600, label: "١٠ دقايق" },
+  { value: 900, label: "١٥ دقيقة" },
 ];
 
 function SettingRow({
@@ -71,7 +70,7 @@ export function SettingsContent() {
   const { theme, setTheme, resolvedTheme } = useTheme();
   const { settings, updateSettings } = useSettingsStore();
   const [notifications, setNotifications] = useState(true);
-  const [refreshInterval, setRefreshInterval] = useState(settings.refreshInterval ?? 60);
+  const [refreshInterval, setRefreshInterval] = useState(settings.refreshInterval ?? 600);
   const handleShare = async () => {
     const shareData = {
       title: "ذهب مصر",

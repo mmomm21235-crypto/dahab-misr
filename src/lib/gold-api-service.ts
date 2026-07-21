@@ -1,35 +1,24 @@
 import type { GoldPrices } from "@/types";
 import { fetchUsdEgpRate } from "./usd-service";
 
-interface GoldApiResponse {
-  timestamp: number;
+interface GoldApiPriceResponse {
+  currency: string;
+  currencySymbol: string;
+  exchangeRate: number;
+  name: string;
   price: number;
-  ch: number;
-  chp: number | null;
-  price_gram_24k: number;
-  price_gram_22k: number;
-  price_gram_21k: number;
-  price_gram_20k: number;
-  price_gram_18k: number;
-  price_gram_14k: number;
-  price_gram_10k: number;
+  symbol: string;
+  updatedAt: string;
+  updatedAtReadable: string;
 }
 
+const TROY_OZ_TO_GRAM = 31.1035;
+
 export async function fetchGoldPricesFromAPI(): Promise<GoldPrices | null> {
-  const apiKey = process.env.GOLD_API_KEY;
-
-  if (!apiKey) {
-    return null;
-  }
-
   try {
     const [goldRes, usdRate] = await Promise.all([
-      fetch("https://www.goldapi.io/api/XAU/EGP", {
-        headers: {
-          "x-access-token": apiKey,
-          "Content-Type": "application/json",
-        },
-        next: { revalidate: 300 },
+      fetch("https://api.gold-api.com/price/XAU", {
+        next: { revalidate: 600 },
       }),
       fetchUsdEgpRate(),
     ]);
@@ -38,40 +27,51 @@ export async function fetchGoldPricesFromAPI(): Promise<GoldPrices | null> {
       return null;
     }
 
-    const data: GoldApiResponse = await goldRes.json();
+    const data: GoldApiPriceResponse = await goldRes.json();
+    const goldUsdPerOz = data.price;
+    const goldUsdPerGram = goldUsdPerOz / TROY_OZ_TO_GRAM;
+    const goldEgpPerGram = goldUsdPerGram * usdRate;
+
+    const karat24Price = Math.round(goldEgpPerGram);
+    const karat22Price = Math.round(goldEgpPerGram * (22 / 24));
+    const karat21Price = Math.round(goldEgpPerGram * (21 / 24));
+    const karat18Price = Math.round(goldEgpPerGram * (18 / 24));
+
+    const spread = 0.02;
+    const poundSpread = 0.015;
 
     return {
       karat24: {
         karat: 24,
-        buyPrice: Math.round(data.price_gram_24k),
-        sellPrice: Math.round(data.price_gram_24k * 1.02),
-        change: Math.round(data.ch / 31.1035),
-        changePercent: data.chp ?? 0,
+        buyPrice: karat24Price,
+        sellPrice: Math.round(karat24Price * (1 + spread)),
+        change: 0,
+        changePercent: 0,
       },
       karat21: {
         karat: 21,
-        buyPrice: Math.round(data.price_gram_21k),
-        sellPrice: Math.round(data.price_gram_21k * 1.02),
-        change: Math.round((data.ch / 31.1035) * 0.875),
-        changePercent: data.chp ?? 0,
+        buyPrice: karat21Price,
+        sellPrice: Math.round(karat21Price * (1 + spread)),
+        change: 0,
+        changePercent: 0,
       },
       karat18: {
         karat: 18,
-        buyPrice: Math.round(data.price_gram_18k),
-        sellPrice: Math.round(data.price_gram_18k * 1.02),
-        change: Math.round((data.ch / 31.1035) * 0.75),
-        changePercent: data.chp ?? 0,
+        buyPrice: karat18Price,
+        sellPrice: Math.round(karat18Price * (1 + spread)),
+        change: 0,
+        changePercent: 0,
       },
       pound: {
         karat: "pound",
-        buyPrice: Math.round(data.price_gram_21k * 8),
-        sellPrice: Math.round(data.price_gram_21k * 8 * 1.015),
-        change: Math.round((data.ch / 31.1035) * 0.875 * 8),
-        changePercent: data.chp ?? 0,
+        buyPrice: Math.round(karat21Price * 8),
+        sellPrice: Math.round(karat21Price * 8 * (1 + poundSpread)),
+        change: 0,
+        changePercent: 0,
       },
       dollar: parseFloat(usdRate.toFixed(2)),
-      lastUpdated: new Date(data.timestamp * 1000).toISOString(),
-      source: "GoldAPI.io",
+      lastUpdated: new Date(data.updatedAt).toISOString(),
+      source: "gold-api.com",
     };
   } catch (err) {
     return null;
