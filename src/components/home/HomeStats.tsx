@@ -4,6 +4,7 @@ import React, { useMemo } from "react";
 import { useGoldContext } from "@/context/GoldContext";
 import { formatPrice, cn } from "@/lib/utils";
 import { motion } from "framer-motion";
+// TODO: Consider lazy-loading Recharts with next/dynamic for better bundle size
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import { TrendingUp, TrendingDown, DollarSign, BarChart3 } from "lucide-react";
 

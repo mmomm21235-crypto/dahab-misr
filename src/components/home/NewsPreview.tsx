@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { TrendingUp, DollarSign, Newspaper } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, formatTimeAgo } from "@/lib/utils";
 import type { NewsArticle } from "@/types";
 
 const ICONS: Record<string, typeof TrendingUp> = {
@@ -18,16 +18,9 @@ const ICON_COLORS: Record<string, string> = {
   economy: "text-purple-500",
 };
 
-function formatTimeAgo(dateString: string): string {
-  const diff = Math.floor((Date.now() - new Date(dateString).getTime()) / 1000);
-  if (diff < 60) return "الآن";
-  if (diff < 3600) return `منذ ${Math.floor(diff / 60)} دقيقة`;
-  if (diff < 86400) return `منذ ${Math.floor(diff / 3600)} ساعة`;
-  return `منذ ${Math.floor(diff / 86400)} يوم`;
-}
-
 export function NewsPreview() {
   const [articles, setArticles] = useState<NewsArticle[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch("/api/news")
@@ -37,8 +30,27 @@ export function NewsPreview() {
           setArticles(data.data.slice(0, 3));
         }
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, []);
+
+  if (loading) {
+    return (
+      <div className="space-y-3">
+        {[...Array(3)].map((_, i) => (
+          <div key={i} className="p-3 rounded-xl bg-muted/50 border border-border/50 animate-pulse">
+            <div className="flex items-start gap-3">
+              <div className="w-4 h-4 rounded bg-muted" />
+              <div className="flex-1 space-y-2">
+                <div className="h-3 bg-muted rounded w-3/4" />
+                <div className="h-2 bg-muted rounded w-1/2" />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
 
   if (articles.length === 0) {
     return (

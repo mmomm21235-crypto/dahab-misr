@@ -1,5 +1,6 @@
 import type { GoldPrices } from "@/types";
 import { fetchUsdEgpRate } from "./usd-service";
+import { prisma } from "@/lib/db/prisma";
 
 interface GoldApiPriceResponse {
   currency: string;
@@ -26,59 +27,73 @@ export async function fetchGoldPricesFromAPI(): Promise<GoldPrices | null> {
       fetchUsdEgpRate(),
     ]);
 
-    clearTimeout(timeout);
-
     if (!goldRes.ok) {
       return null;
     }
 
     const data: GoldApiPriceResponse = await goldRes.json();
+
+    if (typeof data.price !== "number" || data.price <= 0) {
+      return null;
+    }
+
     const goldUsdPerOz = data.price;
     const goldUsdPerGram = goldUsdPerOz / TROY_OZ_TO_GRAM;
     const goldEgpPerGram = goldUsdPerGram * usdRate;
 
-    const karat24Price = Math.round(goldEgpPerGram);
-    const karat22Price = Math.round(goldEgpPerGram * (22 / 24));
-    const karat21Price = Math.round(goldEgpPerGram * (21 / 24));
-    const karat18Price = Math.round(goldEgpPerGram * (18 / 24));
+    const karat24Buy = Math.round(goldEgpPerGram);
+    const karat21Buy = Math.round(goldEgpPerGram * (21 / 24));
+    const karat18Buy = Math.round(goldEgpPerGram * (18 / 24));
+    const poundBuy = Math.round(karat21Buy * 8);
 
-    const spread = 0.02;
-    const poundSpread = 0.015;
+    const prev = await prisma.goldPrice.findFirst({
+      orderBy: { createdAt: "desc" },
+    });
+
+    function calcChange(current: number, prev: number | null): number {
+      return prev ? current - prev : 0;
+    }
+    function calcChangePercent(current: number, prev: number | null): number {
+      return prev ? parseFloat((((current - prev) / prev) * 100).toFixed(2)) : 0;
+    }
 
     return {
       karat24: {
         karat: 24,
-        buyPrice: karat24Price,
-        sellPrice: Math.round(karat24Price * (1 + spread)),
-        change: 0,
-        changePercent: 0,
+        buyPrice: karat24Buy,
+        sellPrice: Math.round(karat24Buy * 0.98),
+        change: calcChange(karat24Buy, prev?.karat24Buy ?? null),
+        changePercent: calcChangePercent(karat24Buy, prev?.karat24Buy ?? null),
       },
       karat21: {
         karat: 21,
-        buyPrice: karat21Price,
-        sellPrice: Math.round(karat21Price * (1 + spread)),
-        change: 0,
-        changePercent: 0,
+        buyPrice: karat21Buy,
+        sellPrice: Math.round(karat21Buy * 0.98),
+        change: calcChange(karat21Buy, prev?.karat21Buy ?? null),
+        changePercent: calcChangePercent(karat21Buy, prev?.karat21Buy ?? null),
       },
       karat18: {
         karat: 18,
-        buyPrice: karat18Price,
-        sellPrice: Math.round(karat18Price * (1 + spread)),
-        change: 0,
-        changePercent: 0,
+        buyPrice: karat18Buy,
+        sellPrice: Math.round(karat18Buy * 0.98),
+        change: calcChange(karat18Buy, prev?.karat18Buy ?? null),
+        changePercent: calcChangePercent(karat18Buy, prev?.karat18Buy ?? null),
       },
       pound: {
         karat: "pound",
-        buyPrice: Math.round(karat21Price * 8),
-        sellPrice: Math.round(karat21Price * 8 * (1 + poundSpread)),
-        change: 0,
-        changePercent: 0,
+        buyPrice: poundBuy,
+        sellPrice: Math.round(poundBuy * 0.98),
+        change: calcChange(poundBuy, prev?.poundBuy ?? null),
+        changePercent: calcChangePercent(poundBuy, prev?.poundBuy ?? null),
       },
       dollar: parseFloat(usdRate.toFixed(2)),
       lastUpdated: new Date(data.updatedAt).toISOString(),
       source: "gold-api.com",
     };
   } catch (err) {
+    console.error("[gold-api-service]", err);
     return null;
+  } finally {
+    clearTimeout(timeout);
   }
 }

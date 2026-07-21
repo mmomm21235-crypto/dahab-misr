@@ -15,17 +15,6 @@ function addNoise(base: number, variance: number = 0.02): number {
   return Math.round(base * (1 + noise));
 }
 
-export async function fetchCurrentUsdRate(): Promise<number> {
-  try {
-    const res = await fetch("https://open.er-api.com/v6/latest/USD");
-    if (res.ok) {
-      const data = await res.json();
-      if (data.rates?.EGP) return data.rates.EGP;
-    }
-  } catch {}
-  return 50.85;
-}
-
 // ===== Generate mock current gold prices =====
 export function generateCurrentPrices(usdRate?: number): GoldPrices {
   const now = new Date().toISOString();
@@ -142,7 +131,6 @@ export function generateHistoricalData(
 
     // Random walk with trend + some noise, more variance = more realistic
     const noise = (Math.random() - 0.5) * 40;
-    const trend = stepChange * (numPoints - i) / numPoints;
     price24 = price24 + noise - stepChange;
 
     // Clamp within bounds

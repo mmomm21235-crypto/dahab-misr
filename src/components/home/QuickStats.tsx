@@ -23,7 +23,7 @@ export const QuickStats = React.memo(function QuickStats() {
   const stats = [
     {
       label: "الدولار",
-      value: `${prices.dollar}`,
+      value: formatPrice(prices.dollar),
       unit: "ج.م",
       Icon: DollarSign,
       color: "text-blue-500",

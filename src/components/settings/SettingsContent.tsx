@@ -22,6 +22,7 @@ import { useTheme } from "@/context/ThemeContext";
 import { useSettingsStore } from "@/stores/settingsStore";
 import { clearCache } from "@/lib/storage";
 import { toast } from "sonner";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { CURRENCIES } from "@/lib/currencies";
@@ -377,15 +378,15 @@ export function SettingsContent() {
             action={<span className="text-xs font-bold text-muted-foreground bg-muted px-2 py-1 rounded-lg">2.0.0</span>}
           />
         </div>
-        <a href="/privacy" className="block py-3">
+        <Link href="/privacy" className="block py-3">
           <SettingRow icon={Shield} label="سياسة الخصوصية" description="بياناتك محفوظة بالكامل على جهازك" iconBg="bg-green-500/10" iconColor="text-green-500" action={<ChevronLeft className="w-4 h-4 text-muted-foreground" />} />
-        </a>
-        <a href="/terms" className="block py-3">
+        </Link>
+        <Link href="/terms" className="block py-3">
           <SettingRow icon={Shield} label="شروط الاستخدام" description="شروط وأحكام استخدام التطبيق" iconBg="bg-blue-500/10" iconColor="text-blue-500" action={<ChevronLeft className="w-4 h-4 text-muted-foreground" />} />
-        </a>
-        <a href="/about" className="block py-3">
+        </Link>
+        <Link href="/about" className="block py-3">
           <SettingRow icon={Info} label="حول التطبيق" description="معلومات عن ذهب مصر" iconBg="bg-purple-500/10" iconColor="text-purple-500" action={<ChevronLeft className="w-4 h-4 text-muted-foreground" />} />
-        </a>
+        </Link>
         <button type="button" onClick={handleInstall} className="w-full text-right">
           <div className="py-3">
             <SettingRow icon={Download} label="تثبيت التطبيق" description="أضف ذهب مصر إلى الشاشة الرئيسية" iconBg="bg-gold-500/10" iconColor="text-gold-500" action={<ChevronLeft className="w-4 h-4 text-muted-foreground" />} />

@@ -173,9 +173,10 @@ export async function invalidateAllUserSessions(userId: string): Promise<void> {
     await prisma.session.deleteMany({ where: { userId } });
 
     for (const [key, fp] of sessionStore.entries()) {
-      void fp;
-      sessionStore.delete(key);
-      anomalyStore.delete(key);
+      if ((fp as any).userId === userId) {
+        sessionStore.delete(key);
+        anomalyStore.delete(key);
+      }
     }
   } catch {
     // Silently handle

@@ -1,5 +1,6 @@
 import { prisma } from "./prisma";
 import type { GoldPrices } from "@/types";
+import { fetchUsdEgpRate } from "@/lib/usd-service";
 
 const GOLD_API_URL = "https://www.goldapi.io/api/XAU/EGP";
 const CACHE_DURATION_MS = 5 * 60 * 1000;
@@ -31,36 +32,38 @@ async function fetchFromGoldApi(): Promise<GoldPrices | null> {
     const pricePerOunce = data.price;
     const pricePerGram = pricePerOunce / ounceToGram;
 
+    const usdRate = await fetchUsdEgpRate();
+
     return {
       karat24: {
         karat: 24,
         buyPrice: Math.round(pricePerGram),
-        sellPrice: Math.round(pricePerGram * 1.02),
+        sellPrice: Math.round(pricePerGram * 0.98),
         change: Math.round(data.change / ounceToGram),
         changePercent: parseFloat(data.chgPercent.toFixed(2)),
       },
       karat21: {
         karat: 21,
         buyPrice: Math.round(pricePerGram * 0.875),
-        sellPrice: Math.round(pricePerGram * 0.875 * 1.02),
+        sellPrice: Math.round(pricePerGram * 0.875 * 0.98),
         change: Math.round((data.change / ounceToGram) * 0.875),
         changePercent: parseFloat(data.chgPercent.toFixed(2)),
       },
       karat18: {
         karat: 18,
         buyPrice: Math.round(pricePerGram * 0.75),
-        sellPrice: Math.round(pricePerGram * 0.75 * 1.02),
+        sellPrice: Math.round(pricePerGram * 0.75 * 0.98),
         change: Math.round((data.change / ounceToGram) * 0.75),
         changePercent: parseFloat(data.chgPercent.toFixed(2)),
       },
       pound: {
         karat: "pound",
         buyPrice: Math.round(pricePerGram * 0.875 * 8),
-        sellPrice: Math.round(pricePerGram * 0.875 * 8 * 1.015),
+        sellPrice: Math.round(pricePerGram * 0.875 * 8 * 0.98),
         change: Math.round((data.change / ounceToGram) * 0.875 * 8),
         changePercent: parseFloat(data.chgPercent.toFixed(2)),
       },
-      dollar: parseFloat((pricePerOunce / pricePerGram).toFixed(2)),
+      dollar: parseFloat(usdRate.toFixed(2)),
       lastUpdated: new Date(data.timestamp * 1000).toISOString(),
       source: "GoldAPI.io",
     };

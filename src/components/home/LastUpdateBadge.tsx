@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Clock, RefreshCw } from "lucide-react";
 import { useGoldContext } from "@/context/GoldContext";
 import { cn } from "@/lib/utils";
@@ -7,6 +8,12 @@ import { motion } from "framer-motion";
 
 export function LastUpdateBadge() {
   const { lastUpdated, isRefreshing, refresh } = useGoldContext();
+  const [, setTick] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => setTick((t) => t + 1), 30000);
+    return () => clearInterval(interval);
+  }, []);
 
   const getTimeAgo = () => {
     if (!lastUpdated) return "جارٍ التحديث...";
