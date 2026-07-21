@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { X, Copy, Share2, MessageCircle } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -13,6 +14,25 @@ interface ShareModalProps {
 }
 
 export function ShareModal({ isOpen, onClose, title, text, url }: ShareModalProps) {
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [isOpen, onClose]);
+
+  useEffect(() => {
+    if (!isOpen || !modalRef.current) return;
+    const firstInteractive = modalRef.current.querySelector<HTMLElement>(
+      "button, [href], input, select, textarea, [tabindex]:not([tabindex='-1'])"
+    );
+    firstInteractive?.focus();
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   const shareUrl = url ?? (typeof window !== "undefined" ? window.location.href : "");
@@ -70,6 +90,7 @@ export function ShareModal({ isOpen, onClose, title, text, url }: ShareModalProp
 
   return (
     <div
+      ref={modalRef}
       className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4"
       dir="rtl"
       role="dialog"

@@ -4,7 +4,7 @@ import { Clock, Circle } from "lucide-react";
 
 function getMarketStatus(): { isOpen: boolean; label: string; nextOpen: string } {
   const now = new Date();
-  const cairoHour = (now.getUTCHours() + 3) % 24;
+  const cairoHour = (now.getUTCHours() + 2) % 24;
   const day = now.getUTCDay();
 
   const isWeekday = day >= 1 && day <= 5;

@@ -24,7 +24,10 @@ export function NewsPreview() {
 
   useEffect(() => {
     fetch("/api/news")
-      .then((r) => r.json())
+      .then((r) => {
+        if (!r.ok) throw new Error("API error");
+        return r.json();
+      })
       .then((data) => {
         if (data.success && data.data?.length > 0) {
           setArticles(data.data.slice(0, 3));

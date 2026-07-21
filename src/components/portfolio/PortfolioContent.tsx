@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { toast } from "sonner";
 import { Wallet, Plus, Trash2, Edit3, TrendingUp, TrendingDown, X, Coins } from "lucide-react";
 import { useGoldContext } from "@/context/GoldContext";
 import { formatCurrency, formatPrice, cn } from "@/lib/utils";
@@ -52,7 +53,10 @@ export function PortfolioContent() {
       const res = await fetch("/api/portfolio");
       const data = await res.json();
       if (data.success) setHoldings(data.data);
-    } catch {} finally {
+    } catch (err) {
+      console.error("[portfolio] Failed to fetch holdings:", err);
+      toast.error("تعذر تحميل المحفظة، حاول مرة أخرى");
+    } finally {
       setIsLoading(false);
     }
   }, []);
@@ -133,7 +137,10 @@ export function PortfolioContent() {
       }
       resetForm();
       fetchHoldings();
-    } catch {} finally {
+    } catch (err) {
+      console.error("[portfolio] Failed to save holding:", err);
+      toast.error("تعذر حفظ الصنف، حاول مرة أخرى");
+    } finally {
       setIsSaving(false);
     }
   };
@@ -143,7 +150,10 @@ export function PortfolioContent() {
     try {
       await fetch(`/api/portfolio/${id}`, { method: "DELETE" });
       fetchHoldings();
-    } catch {}
+    } catch (err) {
+      console.error("[portfolio] Failed to delete holding:", err);
+      toast.error("تعذر حذف الصنف، حاول مرة أخرى");
+    }
   };
 
   if (!session) {

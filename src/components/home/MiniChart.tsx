@@ -37,7 +37,7 @@ export function MiniChart() {
     };
     const timer = setTimeout(fetchData, 300);
     return () => clearTimeout(timer);
-  }, [prices]);
+  }, []);
 
   if (isLoading || pricesLoading) {
     return <Skeleton className="h-40 rounded-2xl" />;
