@@ -10,7 +10,7 @@ interface PriceGridProps {
 }
 
 export function PriceGrid({ prices, isLoading }: PriceGridProps) {
-  if (isLoading || !prices) {
+  if (!prices) {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 stagger-children" role="list">
         {[...Array(4)].map((_, i) => (

@@ -21,7 +21,8 @@ export const useGoldStore = create<GoldState>()(
       lastUpdated: null,
 
       fetchPrices: async (silent = false) => {
-        if (!silent) set({ isLoading: true });
+        const hasPrices = get().prices !== null;
+        if (!silent && !hasPrices) set({ isLoading: true });
         else set({ isRefreshing: true });
         set({ error: null });
 

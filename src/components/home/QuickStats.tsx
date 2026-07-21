@@ -10,7 +10,7 @@ import { motion } from "framer-motion";
 export const QuickStats = React.memo(function QuickStats() {
   const { prices, isLoading } = useGoldContext();
 
-  if (isLoading || !prices) {
+  if (!prices) {
     return (
       <div className="grid grid-cols-3 gap-3">
         {[...Array(3)].map((_, i) => (
