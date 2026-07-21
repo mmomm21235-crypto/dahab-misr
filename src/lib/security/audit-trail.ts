@@ -245,7 +245,8 @@ export async function getAuditTrail(options: {
   const where: any = {};
 
   if (userId && action) {
-    where.identifier = { contains: userId, contains: `audit:${action}` };
+    where.identifier = { contains: userId };
+    where.token = { contains: `audit:${action}` };
   } else if (userId) {
     where.identifier = { contains: userId };
   } else if (action) {
