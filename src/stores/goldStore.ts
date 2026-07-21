@@ -15,7 +15,7 @@ export const useGoldStore = create<GoldState>()(
   persist(
     (set, get) => ({
       prices: null,
-      isLoading: true,
+      isLoading: false,
       isRefreshing: false,
       error: null,
       lastUpdated: null,
