@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
 import { fetchGoldPricesFromAPI } from "@/lib/gold-api-service";
 import { generateCurrentPrices } from "@/lib/goldData";
-import { prisma } from "@/lib/db/prisma";
-import { checkAlertsAndNotify } from "@/lib/push-service";
 import { withSecurity } from "@/lib/api-security";
 
 export const dynamic = "force-dynamic";
@@ -41,6 +39,7 @@ export const GET = withSecurity(async () => {
     lastFetchTime = now;
 
     try {
+      const { prisma } = await import("@/lib/db/prisma");
       const fiveMinAgo = new Date(now - 5 * 60 * 1000);
       const lastRecord = await prisma.goldPrice.findFirst({
         where: { createdAt: { gte: fiveMinAgo } },
@@ -68,13 +67,7 @@ export const GET = withSecurity(async () => {
         });
       }
     } catch (dbErr) {
-      console.error("[GOLD-PRICES] DB write failed:", dbErr);
-    }
-
-    try {
-      await checkAlertsAndNotify(prices);
-    } catch (alertErr) {
-      console.error("[GOLD-PRICES] Alert check failed:", alertErr);
+      console.error("[GOLD-PRICES] DB write skipped:", dbErr);
     }
 
     return NextResponse.json(

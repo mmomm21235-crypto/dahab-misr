@@ -1,6 +1,5 @@
 import type { GoldPrices } from "@/types";
 import { fetchUsdEgpRate } from "./usd-service";
-import { prisma } from "@/lib/db/prisma";
 
 interface GoldApiPriceResponse {
   currency: string;
@@ -46,15 +45,21 @@ export async function fetchGoldPricesFromAPI(): Promise<GoldPrices | null> {
     const karat18Buy = Math.round(goldEgpPerGram * (18 / 24));
     const poundBuy = Math.round(karat21Buy * 8);
 
-    const prev = await prisma.goldPrice.findFirst({
-      orderBy: { createdAt: "desc" },
-    });
-
-    function calcChange(current: number, prev: number | null): number {
-      return prev ? current - prev : 0;
+    let prev: { karat24Buy: number; karat21Buy: number; karat18Buy: number; poundBuy: number } | null = null;
+    try {
+      const { prisma } = await import("@/lib/db/prisma");
+      prev = await prisma.goldPrice.findFirst({
+        orderBy: { createdAt: "desc" },
+      });
+    } catch {
+      prev = null;
     }
-    function calcChangePercent(current: number, prev: number | null): number {
-      return prev ? parseFloat((((current - prev) / prev) * 100).toFixed(2)) : 0;
+
+    function calcChange(current: number, prevVal: number | null | undefined): number {
+      return prevVal ? current - prevVal : 0;
+    }
+    function calcChangePercent(current: number, prevVal: number | null | undefined): number {
+      return prevVal ? parseFloat((((current - prevVal) / prevVal) * 100).toFixed(2)) : 0;
     }
 
     return {
@@ -62,29 +67,29 @@ export async function fetchGoldPricesFromAPI(): Promise<GoldPrices | null> {
         karat: 24,
         buyPrice: karat24Buy,
         sellPrice: Math.round(karat24Buy * 0.98),
-        change: calcChange(karat24Buy, prev?.karat24Buy ?? null),
-        changePercent: calcChangePercent(karat24Buy, prev?.karat24Buy ?? null),
+        change: calcChange(karat24Buy, prev?.karat24Buy),
+        changePercent: calcChangePercent(karat24Buy, prev?.karat24Buy),
       },
       karat21: {
         karat: 21,
         buyPrice: karat21Buy,
         sellPrice: Math.round(karat21Buy * 0.98),
-        change: calcChange(karat21Buy, prev?.karat21Buy ?? null),
-        changePercent: calcChangePercent(karat21Buy, prev?.karat21Buy ?? null),
+        change: calcChange(karat21Buy, prev?.karat21Buy),
+        changePercent: calcChangePercent(karat21Buy, prev?.karat21Buy),
       },
       karat18: {
         karat: 18,
         buyPrice: karat18Buy,
         sellPrice: Math.round(karat18Buy * 0.98),
-        change: calcChange(karat18Buy, prev?.karat18Buy ?? null),
-        changePercent: calcChangePercent(karat18Buy, prev?.karat18Buy ?? null),
+        change: calcChange(karat18Buy, prev?.karat18Buy),
+        changePercent: calcChangePercent(karat18Buy, prev?.karat18Buy),
       },
       pound: {
         karat: "pound",
         buyPrice: poundBuy,
         sellPrice: Math.round(poundBuy * 0.98),
-        change: calcChange(poundBuy, prev?.poundBuy ?? null),
-        changePercent: calcChangePercent(poundBuy, prev?.poundBuy ?? null),
+        change: calcChange(poundBuy, prev?.poundBuy),
+        changePercent: calcChangePercent(poundBuy, prev?.poundBuy),
       },
       dollar: parseFloat(usdRate.toFixed(2)),
       lastUpdated: new Date(data.updatedAt).toISOString(),
