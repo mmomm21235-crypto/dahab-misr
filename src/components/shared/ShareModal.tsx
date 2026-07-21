@@ -125,7 +125,7 @@ export function ShareModal({ isOpen, onClose, title, text, url }: ShareModalProp
                 rel="noopener noreferrer"
                 className="flex flex-col items-center gap-1.5"
               >
-                <div className={cn("w-12 h-12 rounded-xl flex items-center justify-center text-white transition-colors", color)}>
+                <div className={cn("w-12 h-12 rounded-xl flex items-center justify-center text-white transition-colors", color)} aria-hidden="true">
                   <Icon className="w-5 h-5" />
                 </div>
                 <span className="text-[11px] text-muted-foreground font-medium">{label}</span>

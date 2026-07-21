@@ -41,7 +41,7 @@ const SQL_INJECTION_PATTERNS = [
   /(\b(SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|EXEC|EXECUTE|UNION|FETCH|DECLARE|TRUNCATE)\b)/i,
   /(-{2})|(\b(OR|AND)\b\s+\d+\s*=\s*\d+)/i,
   /(\/\*)|(\*\/)|(;)/,
-  /(')|(")|(--)/,
+  /(union\s+select|drop\s+table|;\s*delete|;\s*update|--\s*$)/i,
   /\b(0x[0-9a-f]+)\b/i,
   /\b(WAITFOR\s+DELAY)\b/i,
   /\b(BENCHMARK\s*\()/i,

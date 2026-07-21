@@ -44,6 +44,7 @@ export const GET = withSecurity(async () => {
       },
     });
   } catch (error) {
+    console.error("Failed to fetch portfolio summary:", error);
     return NextResponse.json({ success: false, error: "Failed to fetch summary" }, { status: 500 });
   }
 }, { rateLimit: "portfolio", requireAuth: true });

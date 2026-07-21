@@ -3,7 +3,7 @@ import { getSession } from "@/lib/auth";
 import { getUserAlerts, createAlert, deleteAlert } from "@/lib/db/alerts";
 import { withSecurity } from "@/lib/api-security";
 
-const VALID_KARATS = [24, 21, 18, "pound"] as const;
+const VALID_KARATS = ["24", "21", "18", "pound"] as const;
 const VALID_CONDITIONS = ["above", "below"] as const;
 
 export const GET = withSecurity(async () => {
@@ -28,7 +28,7 @@ export const POST = withSecurity(async (req) => {
       return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
     const body = await req.json();
-    if (!body || !VALID_KARATS.includes(body.karat) || !VALID_CONDITIONS.includes(body.condition) || typeof body.targetPrice !== "number" || body.targetPrice <= 0) {
+    if (!body || !(VALID_KARATS as readonly string[]).includes(String(body.karat)) || !VALID_CONDITIONS.includes(body.condition) || typeof body.targetPrice !== "number" || body.targetPrice <= 0) {
       return NextResponse.json({ success: false, error: "Invalid request" }, { status: 400 });
     }
     const alert = await createAlert(userId, body);

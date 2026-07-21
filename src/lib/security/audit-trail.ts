@@ -244,8 +244,13 @@ export async function getAuditTrail(options: {
 
   const where: any = {};
 
-  if (userId) where.identifier = { contains: userId };
-  if (action) where.identifier = { contains: `audit:${action}` };
+  if (userId && action) {
+    where.identifier = { contains: userId, contains: `audit:${action}` };
+  } else if (userId) {
+    where.identifier = { contains: userId };
+  } else if (action) {
+    where.identifier = { contains: `audit:${action}` };
+  }
   if (entity) where.token = { contains: `"entity":"${entity}"` };
   if (startDate || endDate) {
     where.expires = {};
@@ -346,6 +351,13 @@ export async function exportAuditTrail(
   });
 
   if (format === "csv") {
+    const escapeCsvField = (field: string): string => {
+      if (field.includes(",") || field.includes('"') || field.includes("\n")) {
+        return `"${field.replace(/"/g, '""')}"`;
+      }
+      return field;
+    };
+
     const headers = "Timestamp,Action,Entity,EntityId,UserId,IP,UserAgent,Checksum\n";
     const rows = result.entries
       .map((e) =>
@@ -358,7 +370,7 @@ export async function exportAuditTrail(
           e.ip || "",
           e.userAgent || "",
           e.checksum || "",
-        ].join(",")
+        ].map(escapeCsvField).join(",")
       )
       .join("\n");
     return headers + rows;

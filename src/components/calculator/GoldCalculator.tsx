@@ -139,7 +139,7 @@ export function GoldCalculator() {
         <div className="flex gap-3">
           <div className="relative flex-1">
             <input type="number" value={weight} onChange={(e) => setWeight(e.target.value)}
-              placeholder="الوزن" min="0" step="0.01" inputMode="decimal"
+              placeholder="الوزن" min="0" step="0.01" inputMode="decimal" aria-label="الوزن بالجرام"
               className="w-full text-3xl font-black text-center py-5 px-6 rounded-xl bg-muted/50 border-2 border-border focus:outline-none focus:border-gold-500 transition-colors placeholder:text-muted-foreground/30" />
             <span className="absolute end-5 top-1/2 -translate-y-1/2 text-sm text-muted-foreground/80 font-bold">جرام</span>
           </div>

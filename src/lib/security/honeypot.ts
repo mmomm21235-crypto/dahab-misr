@@ -91,7 +91,7 @@ const honeypotHits: HoneypotHit[] = globalThis.__honeypotHits ??= [];
 const honeypotBans: Map<string, HoneypotBan> = globalThis.__honeypotBans ??= new Map();
 
 const MAX_HITS = 500;
-const AUTO_BAN_THRESHOLD = 1;
+const AUTO_BAN_THRESHOLD = 3;
 const BAN_DURATION_MS = 24 * 60 * 60 * 1000; // 24 hours
 
 declare global {

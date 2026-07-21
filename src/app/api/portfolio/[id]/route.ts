@@ -25,6 +25,31 @@ export const PUT = withSecurity(async (request: Request, { params }: Props) => {
     const body = await request.json();
     const { name, karat, weight, buyPrice, buyDate, notes } = body;
 
+    if (karat !== undefined) {
+      const parsedKarat = parseInt(karat);
+      if (![14, 18, 21, 24].includes(parsedKarat)) {
+        return NextResponse.json({ success: false, error: "Invalid karat. Must be 14, 18, 21, or 24" }, { status: 400 });
+      }
+    }
+    if (weight !== undefined) {
+      const parsedWeight = parseFloat(weight);
+      if (isNaN(parsedWeight) || parsedWeight <= 0 || parsedWeight >= 10000) {
+        return NextResponse.json({ success: false, error: "Invalid weight. Must be between 0 and 10000" }, { status: 400 });
+      }
+    }
+    if (buyPrice !== undefined) {
+      const parsedBuyPrice = parseFloat(buyPrice);
+      if (isNaN(parsedBuyPrice) || parsedBuyPrice <= 0 || parsedBuyPrice >= 1000000) {
+        return NextResponse.json({ success: false, error: "Invalid buy price. Must be between 0 and 1000000" }, { status: 400 });
+      }
+    }
+    if (buyDate !== undefined) {
+      const date = new Date(buyDate);
+      if (isNaN(date.getTime())) {
+        return NextResponse.json({ success: false, error: "Invalid buy date" }, { status: 400 });
+      }
+    }
+
     const data: Record<string, string | number> = {};
     if (name) data.name = String(name).slice(0, 100);
     if (karat) data.karat = parseInt(karat);

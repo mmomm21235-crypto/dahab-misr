@@ -35,7 +35,7 @@ export const POST = withSecurity(async (req) => {
     const body = await req.json();
     if (
       !body ||
-      !VALID_KARATS.includes(body.karat) ||
+      !(VALID_KARATS as readonly string[]).includes(String(body.karat)) ||
       !VALID_CONDITIONS.includes(body.condition) ||
       typeof body.targetPrice !== "number" ||
       typeof body.currentPrice !== "number"

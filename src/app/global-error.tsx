@@ -19,7 +19,7 @@ export default function GlobalError({
             <p className="text-muted-foreground text-sm">
               حدث خطأ أثناء تحميل الصفحة. يرجى المحاولة مرة أخرى.
             </p>
-            {error.digest && (
+            {process.env.NODE_ENV === "development" && error.digest && (
               <p className="text-muted-foreground/50 text-xs mt-2 font-mono">
                 {error.digest}
               </p>

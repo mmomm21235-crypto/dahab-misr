@@ -12,8 +12,8 @@ export const POST = withSecurity(async (req) => {
     }
 
     const body = await req.json();
-    if (!body.subscription) {
-      return NextResponse.json({ success: false, error: "Missing subscription" }, { status: 400 });
+    if (!body.subscription?.endpoint || !body.subscription?.keys?.p256dh || !body.subscription?.keys?.auth) {
+      return NextResponse.json({ success: false, error: "Invalid subscription" }, { status: 400 });
     }
 
     const subscriptionJson = JSON.stringify(body.subscription);

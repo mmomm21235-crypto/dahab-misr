@@ -12,9 +12,11 @@ interface PriceGridProps {
 export function PriceGrid({ prices, isLoading }: PriceGridProps) {
   if (isLoading || !prices) {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 stagger-children">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 stagger-children" role="list">
         {[...Array(4)].map((_, i) => (
-          <GoldPriceCardSkeleton key={i} />
+          <div role="listitem" key={i}>
+            <GoldPriceCardSkeleton />
+          </div>
         ))}
       </div>
     );
@@ -28,14 +30,15 @@ export function PriceGrid({ prices, isLoading }: PriceGridProps) {
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4" role="list">
       {cards.map(({ price, isHighlighted, delay }) => (
-        <GoldPriceCard
-          key={price.karat}
-          price={price}
-          isHighlighted={isHighlighted}
-          animationDelay={delay}
-        />
+        <div role="listitem" key={price.karat}>
+          <GoldPriceCard
+            price={price}
+            isHighlighted={isHighlighted}
+            animationDelay={delay}
+          />
+        </div>
       ))}
     </div>
   );

@@ -90,7 +90,9 @@ function verify(token: string): TokenPayload | null {
       .replace(/\//g, "_")
       .replace(/=+$/, "");
 
-    if (signature !== expectedSig) return null;
+    const sigBuf = Buffer.from(signature, "base64");
+    const expectedBuf = Buffer.from(expectedSig, "base64");
+    if (sigBuf.length !== expectedBuf.length || !crypto.timingSafeEqual(sigBuf, expectedBuf)) return null;
 
     const payload: TokenPayload = JSON.parse(base64UrlDecode(body).toString("utf8"));
 

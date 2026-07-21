@@ -32,7 +32,7 @@ export function MarketHours() {
   const status = getMarketStatus();
 
   return (
-    <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-muted/50 text-xs">
+    <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-muted/50 text-xs" aria-live="polite">
       <Circle
         className={`w-2 h-2 ${status.isOpen ? "fill-green-500 text-green-500 animate-pulse" : "fill-red-400 text-red-400"}`}
       />

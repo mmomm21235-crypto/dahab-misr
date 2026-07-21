@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db/prisma";
-import { requireAdmin, sanitizeString, validatePhone } from "@/lib/admin";
+import { sanitizeString, validatePhone } from "@/lib/admin";
 import { withSecurity } from "@/lib/api-security";
 
 export const GET = withSecurity(async () => {
@@ -18,7 +18,7 @@ export const GET = withSecurity(async () => {
         location: true,
       },
     });
-    return NextResponse.json(shops);
+    return NextResponse.json({ success: true, data: shops });
   } catch (error) {
     return NextResponse.json({ success: false, error: "Failed to fetch shops" }, { status: 500 });
   }
@@ -26,8 +26,6 @@ export const GET = withSecurity(async () => {
 
 export const POST = withSecurity(async (req) => {
   try {
-    await requireAdmin();
-
     const body = await req.json();
     const name = sanitizeString(body.name, 100);
     const phone = sanitizeString(body.phone, 20);
@@ -75,4 +73,4 @@ export const POST = withSecurity(async (req) => {
     }
     return NextResponse.json({ success: false, error: "Failed to create shop" }, { status: 500 });
   }
-}, { rateLimit: "shops" });
+}, { rateLimit: "shops", requireAdmin: true });
