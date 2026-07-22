@@ -30,8 +30,10 @@ export const useGoldStore = create<GoldState>()(
           const controller = new AbortController();
           const timeoutId = setTimeout(() => controller.abort(), 15000);
 
-          const res = await fetch("/api/gold-prices", {
+          const cacheBuster = `_t=${Date.now()}`;
+          const res = await fetch(`/api/gold-prices?${cacheBuster}`, {
             signal: controller.signal,
+            cache: "no-store",
           });
           clearTimeout(timeoutId);
 
