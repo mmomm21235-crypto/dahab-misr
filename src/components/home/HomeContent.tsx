@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useGoldContext } from "@/context/GoldContext";
 import { PriceGrid } from "./PriceGrid";
 import { LastUpdateBadge } from "./LastUpdateBadge";
@@ -19,6 +19,11 @@ import { MarketHours } from "./MarketHours";
 export function HomeContent() {
   const { prices, isLoading, error, refresh } = useGoldContext();
   const [showShare, setShowShare] = useState(false);
+  const [origin, setOrigin] = useState("");
+
+  useEffect(() => {
+    setOrigin(window.location.origin);
+  }, []);
 
   const handleRefresh = useCallback(async () => {
     refresh();
@@ -42,7 +47,7 @@ export function HomeContent() {
         onClose={() => setShowShare(false)}
         title="ذهب مصر - أسعار الذهب اليوم"
         text={shareText}
-        url={typeof window !== "undefined" ? window.location.origin : ""}
+        url={origin}
       />
       <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-gold-900 via-gold-800 to-amber-900 p-6 text-white shadow-2xl shadow-gold-900/30">
         <div className="absolute inset-0 opacity-10" style={{ backgroundImage: `radial-gradient(circle at 20% 50%,rgba(255,255,255,0.3) 0%,transparent 60%),radial-gradient(circle at 80% 20%,rgba(255,255,255,0.2) 0%,transparent 50%)` }} />

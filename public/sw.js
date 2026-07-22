@@ -171,7 +171,7 @@ async function staleWhileRevalidate(request, cacheName, maxAgeSeconds) {
       if (response.ok) {
         const headers = new Headers(response.headers);
         headers.set("sw-cached-at", Date.now().toString());
-        const timedResponse = new Response(response.clone().clone().blob(), {
+        const timedResponse = new Response(await response.clone().blob(), {
           status: response.status,
           statusText: response.statusText,
           headers,

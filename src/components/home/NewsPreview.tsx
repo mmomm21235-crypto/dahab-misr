@@ -21,6 +21,7 @@ const ICON_COLORS: Record<string, string> = {
 export function NewsPreview() {
   const [articles, setArticles] = useState<NewsArticle[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/api/news")
@@ -33,7 +34,7 @@ export function NewsPreview() {
           setArticles(data.data.slice(0, 3));
         }
       })
-      .catch(() => {})
+      .catch(() => setError("تعذر تحميل الأخبار"))
       .finally(() => setLoading(false));
   }, []);
 
@@ -52,6 +53,14 @@ export function NewsPreview() {
           </div>
         ))}
       </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <p className="text-sm text-red-500 dark:text-red-400 text-center py-4">
+        {error}
+      </p>
     );
   }
 

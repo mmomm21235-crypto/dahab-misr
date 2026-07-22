@@ -6,7 +6,14 @@ interface ExchangeRateResponse {
   date: string;
 }
 
+let cachedRate: { rate: number; timestamp: number } | null = null;
+const CACHE_TTL = 60 * 60 * 1000;
+
 export async function fetchUsdEgpRate(): Promise<number> {
+  if (cachedRate && Date.now() - cachedRate.timestamp < CACHE_TTL) {
+    return cachedRate.rate;
+  }
+
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 8000);
 
@@ -28,8 +35,9 @@ export async function fetchUsdEgpRate(): Promise<number> {
       return FALLBACK_RATE;
     }
 
+    cachedRate = { rate, timestamp: Date.now() };
     return rate;
-  } catch (err) {
+  } catch {
     return FALLBACK_RATE;
   }
 }

@@ -24,29 +24,39 @@ const GoldContext = createContext<GoldContextValue>({
 });
 
 export function GoldProvider({ children }: { children: React.ReactNode }) {
-  const { prices, isLoading, isRefreshing, error, lastUpdated, fetchPrices } =
-    useGoldStore();
-  const { settings } = useSettingsStore();
+  const prices = useGoldStore((s) => s.prices);
+  const isLoading = useGoldStore((s) => s.isLoading);
+  const isRefreshing = useGoldStore((s) => s.isRefreshing);
+  const error = useGoldStore((s) => s.error);
+  const lastUpdated = useGoldStore((s) => s.lastUpdated);
+  const fetchPrices = useGoldStore((s) => s.fetchPrices);
+  const refreshInterval = useSettingsStore((s) => s.settings.refreshInterval);
 
   useEffect(() => {
     fetchPrices(false);
-    const intervalMs = (settings.refreshInterval ?? 600) * 1000;
+    const intervalMs = (refreshInterval ?? 600) * 1000;
     const interval = setInterval(() => fetchPrices(true), intervalMs);
     return () => clearInterval(interval);
-  }, [fetchPrices, settings.refreshInterval]);
+  }, [fetchPrices, refreshInterval]);
 
   const refresh = useCallback(() => fetchPrices(true), [fetchPrices]);
 
-  const value = useMemo(() => {
-    return {
+  const lastUpdatedDate = useMemo(
+    () => (lastUpdated ? new Date(lastUpdated) : null),
+    [lastUpdated]
+  );
+
+  const value = useMemo(
+    () => ({
       prices,
       isLoading,
       isRefreshing,
       error,
       refresh,
-      lastUpdated: lastUpdated ? new Date(lastUpdated) : null,
-    };
-  }, [prices, isLoading, isRefreshing, error, refresh, lastUpdated]);
+      lastUpdated: lastUpdatedDate,
+    }),
+    [prices, isLoading, isRefreshing, error, refresh, lastUpdatedDate]
+  );
 
   return (
     <GoldContext.Provider value={value}>

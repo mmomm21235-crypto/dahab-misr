@@ -49,7 +49,10 @@ export const GoldPriceCard = React.memo(function GoldPriceCard({
   useEffect(() => {
     if (prevBuyRef.current !== price.buyPrice) {
       const dir = price.buyPrice > prevBuyRef.current ? "up" : "down";
-      setFlash(dir);
+      const prefersReduced =
+        typeof window !== "undefined" &&
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (!prefersReduced) setFlash(dir);
       prevBuyRef.current = price.buyPrice;
       const t = setTimeout(() => setFlash(null), 1500);
       return () => clearTimeout(t);
@@ -74,7 +77,7 @@ export const GoldPriceCard = React.memo(function GoldPriceCard({
         transition: { duration: 0.2 },
       }}
       className={cn(
-        "gold-card p-5 cursor-pointer transition-colors duration-500",
+        "gold-card p-5 transition-colors duration-500",
         `bg-gradient-to-br ${colorClass}`,
         flash === "up" && "ring-2 ring-green-500/60 bg-green-500/5",
         flash === "down" && "ring-2 ring-red-500/60 bg-red-500/5",

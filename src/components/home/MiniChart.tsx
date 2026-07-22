@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   AreaChart,
   Area,
@@ -19,24 +19,37 @@ export function MiniChart() {
   const { prices, isLoading: pricesLoading } = useGoldContext();
   const [data, setData] = useState<GoldHistoryPoint[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const pricesRef = useRef(prices);
+  pricesRef.current = prices;
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchData = async () => {
       try {
-        const res = await fetch("/api/gold-prices/history?period=day");
+        const res = await fetch("/api/gold-prices/history?period=day", {
+          signal: controller.signal,
+        });
         const json = await res.json();
         if (json.success && json.data.length > 1) {
           setData(json.data);
         } else {
-          setData(generateHistoricalData("day", prices ?? undefined));
+          setData(
+            generateHistoricalData("day", pricesRef.current ?? undefined)
+          );
         }
       } catch {
-        setData(generateHistoricalData("day", prices ?? undefined));
+        if (!controller.signal.aborted) {
+          setData(
+            generateHistoricalData("day", pricesRef.current ?? undefined)
+          );
+        }
       }
       setIsLoading(false);
     };
-    const timer = setTimeout(fetchData, 300);
-    return () => clearTimeout(timer);
+
+    fetchData();
+    return () => controller.abort();
   }, []);
 
   if (isLoading || pricesLoading) {
@@ -58,6 +71,8 @@ export function MiniChart() {
   return (
     <motion.div
       className="gold-card p-4"
+      role="img"
+      aria-label={`رسم بياني لحركة سعر عيار 21. التغير: ${isUp ? "ارتفاع" : "انخفاض"} ${formatPrice(Math.abs(lastPrice - firstPrice))} ج.م`}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.3 }}

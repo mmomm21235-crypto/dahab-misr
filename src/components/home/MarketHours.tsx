@@ -1,11 +1,33 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Clock, Circle } from "lucide-react";
 
 function getMarketStatus(): { isOpen: boolean; label: string; nextOpen: string } {
   const now = new Date();
-  const cairoHour = (now.getUTCHours() + 2) % 24;
-  const day = now.getUTCDay();
+  let cairoHour: number;
+  let day: number;
+
+  try {
+    cairoHour = parseInt(
+      new Intl.DateTimeFormat("en", {
+        hour: "numeric",
+        hour12: false,
+        timeZone: "Africa/Cairo",
+      }).format(now)
+    );
+    const weekday = new Intl.DateTimeFormat("en", {
+      weekday: "short",
+      timeZone: "Africa/Cairo",
+    }).format(now);
+    const dayMap: Record<string, number> = {
+      Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6,
+    };
+    day = dayMap[weekday] ?? now.getDay();
+  } catch {
+    cairoHour = (now.getUTCHours() + 2) % 24;
+    day = now.getUTCDay();
+  }
 
   const isWeekday = day >= 1 && day <= 5;
   const isMarketHours = cairoHour >= 9 && cairoHour < 17;
@@ -29,7 +51,12 @@ function getMarketStatus(): { isOpen: boolean; label: string; nextOpen: string }
 }
 
 export function MarketHours() {
-  const status = getMarketStatus();
+  const [status, setStatus] = useState(getMarketStatus);
+
+  useEffect(() => {
+    const interval = setInterval(() => setStatus(getMarketStatus()), 60000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-muted/50 text-xs" aria-live="polite">
