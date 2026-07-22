@@ -23,15 +23,22 @@ export const useGoldStore = create<GoldState>()(
       fetchPrices: async (silent = false) => {
         const hasPrices = get().prices !== null;
         if (!silent && !hasPrices) set({ isLoading: true });
-        else set({ isRefreshing: true });
+        else if (silent) set({ isRefreshing: true });
         set({ error: null });
 
         try {
-          const res = await fetch("/api/gold-prices");
-          if (!res.ok) throw new Error("API error");
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 15000);
+
+          const res = await fetch("/api/gold-prices", {
+            signal: controller.signal,
+          });
+          clearTimeout(timeoutId);
+
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
           const json = await res.json();
-          if (!json.success) throw new Error(json.error);
+          if (!json.success) throw new Error(json.error || "API failed");
 
           set({
             prices: json.data,
@@ -39,9 +46,13 @@ export const useGoldStore = create<GoldState>()(
             isLoading: false,
             isRefreshing: false,
           });
-        } catch {
+        } catch (err: unknown) {
+          const msg =
+            err instanceof Error && err.name === "AbortError"
+              ? "انتهت مهلة الاتصال."
+              : "تعذر تحديث الأسعار. يرجى المحاولة مجدداً.";
           set({
-            error: "تعذر تحديث الأسعار. يرجى المحاولة مجدداً.",
+            error: msg,
             isLoading: false,
             isRefreshing: false,
           });
